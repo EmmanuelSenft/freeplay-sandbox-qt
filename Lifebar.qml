@@ -25,7 +25,7 @@ ProgressBar {
                 z: 1
                 anchors.fill: parent
                 radius: Math.max(width, height) / 2
-                color: "transparent"
+                color: "#40FFFFFF"
                 border.color: "#80808080"
                 border.width: 8
 

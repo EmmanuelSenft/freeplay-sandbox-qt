@@ -50,7 +50,18 @@ Item {
             itemDying(name)
         }
     }
-
+    Rectangle{
+        id: circle
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        width: parent.width*1.2
+        height: parent.width*1.2
+        radius: width/2
+        border.color: "black"
+        opacity: .6
+        border.width: width/30
+        color: "transparent"
+    }
     Item {
         id: objectCenter
         anchors.centerIn: parent
