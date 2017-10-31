@@ -346,10 +346,6 @@ Window {
                 name: "flower-3"
             }
             StaticImage{
-                id: lavender
-                name: "lavender-1"
-            }
-            StaticImage{
                 id: apple1
                 name: "apple-1"
             }
@@ -387,7 +383,7 @@ Window {
             Character {
                 id: butterfly
                 name: "butterfly"
-                food: ["flower","lavender"]
+                food: ["flower"]
                 initialScale:.8
                 collidesWith: interactiveitems.collisionCategories
             }
@@ -467,7 +463,7 @@ Window {
                 return [eagle, wolf, rat, snake,bird,frog,dragonfly,fly,butterfly,grasshopper]
             }
             function getStaticItems() {
-                return [lavender, flower1, flower2, flower3, apple1, apple2, apple3, wheat1, wheat2, wheat3]
+                return [flower1, flower2, flower3, apple1, apple2, apple3, wheat1, wheat2, wheat3]
             }
 
             function hideItems(items) {
