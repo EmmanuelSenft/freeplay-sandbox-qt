@@ -24,8 +24,10 @@ Item {
 
     Item {
         id: instructionScreen
-        anchors.fill: parent
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
         visible: true
+        height: parent.height*.1
         property string text: "Connect animals to their food."
         z: 0
 
@@ -107,7 +109,7 @@ Item {
             anchors.fill: parent
             horizontalAlignment: Label.AlignHCenter
             verticalAlignment: Label.AlignVCenter
-            font.pixelSize: 15
+            font.pixelSize: 20
             font.bold: true
             text: "Undo"
         }
@@ -151,7 +153,7 @@ Item {
         for(var i=images.children.length-1;i>=0;i--)
             images.children[i].destroy()
          var offset = 250
-         var radiusHeight=(graph.height-offset)/2
+         var radiusHeight=(graph.height-instructionScreen.height-offset)/2
          var radiusWidth=(graph.width-offset)/2
          for(var i=0; i<imageNames.length;i++){
              var string = "import QtQuick 2.0; Image{property string name: \""+imageNames[i]+"\"}"
@@ -161,7 +163,7 @@ Item {
              obj.fillMode = Image.PreserveAspectFit
              obj.source = "/res/"+imageNames[i]+".png"
              obj.x = radiusWidth*Math.cos(2*Math.PI*i/imageNames.length)+graph.width/2-offset/4
-             obj.y = radiusHeight*Math.sin(2*Math.PI*i/imageNames.length)+graph.height/2-offset/2
+             obj.y = radiusHeight*Math.sin(2*Math.PI*i/imageNames.length)+(graph.height+instructionScreen.height)/2-offset/2
          }
          ready=true
     }
