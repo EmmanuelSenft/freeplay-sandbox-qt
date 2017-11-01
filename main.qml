@@ -52,9 +52,18 @@ Window {
                 PropertyChanges { target: drawingarea; visible: false}
             },
             State {
-                    name: "test"
-                    PropertyChanges { target: graph; visible: true}
-                    PropertyChanges { target: informationScreen; visible: false}
+                    name: "pretest"
+                    PropertyChanges { target: informationScreen; visible: true}
+            },
+            State {
+                    name: "midtest"
+                    PropertyChanges { target: informationScreen; visible: true}
+                    PropertyChanges { target: informationScreen; text: "Let's try to connect again the animals to their food."}
+            },
+            State {
+                    name: "posttest"
+                    PropertyChanges { target: informationScreen; visible: true}
+                    PropertyChanges { target: informationScreen; text: "Let's connect the animals to their food a last time."}
             },
             State {
                     name: "game"
@@ -63,14 +72,13 @@ Window {
             State {
                     name: "endRound"
                     PropertyChanges { target: informationScreen; visible: true}
-                    PropertyChanges { target: buttonStart; text: "Try again"}
                     PropertyChanges { target: informationScreen; text: "Three animals died, so the game stops. \n You finished with " + Math.round(sandbox.points) +" points. \n Well done!"}
             },
             State {
                     name: "prepareGame"
                     PropertyChanges { target: informationScreen; visible: true}
                     PropertyChanges { target: instructionScreen; visible: false}
-                    PropertyChanges { target: informationScreen; text: "Welcome to the food chain game, \n try to keep animal alive as long \n as possible by feeding them."}
+                    PropertyChanges { target: informationScreen; text: "You have keep all the animals alive as long as possible! \n\n Now feed them!"}
             },
             State {
                     name: "tutorialIntro"
@@ -96,10 +104,28 @@ Window {
         ]
         onStateChanged: {
             switch (globalStates.state){
-                case "test":
-                    graph.start()
+                case "pretest":
+                    informationScreen.text = "We will start by connecting the animals to their food."
+                    buttonStart.visible = true
+                    break
+                case "midtest":
+                    console.log("in")
+                    informationScreen.text = "Let's try to connect again the animals to their food."
+                    buttonStart.visible = true
+                    console.log(informationScreen.text)
+                    break
+                case "posttest":
+                    informationScreen.text = "Let's connect the animals to their food a last time."
+                    buttonStart.visible = true
                     break
                 case "endGame":
+                    buttonStart.text = "Continue"
+                    break
+                case "endRound":
+                    if(rounds == maxRounds/2)
+                        buttonStart.text = "Continue"
+                    else
+                        buttonStart.text = "Try again"
                     break
             }
         }
@@ -660,11 +686,13 @@ Window {
             radius: width / 10
             Label {
                 id: informationText
+                width: parent.width*.9
                 font.pixelSize: 50
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: informationScreen.text
+                wrapMode: Text.WordWrap
             }
             Button {
                 id: buttonStart
@@ -688,21 +716,43 @@ Window {
                     //    tutorial.practice()
                     //else
                     switch (globalStates.state){
-                    case "endGame":
-                        globalStates.state = "test"
+                    case "pretest":
+                        informationScreen.visible = false
+                        graph.start()
+                        graph.nextState = "tutorialIntro"
+                        break
+                    case "midtest":
+                        informationScreen.visible = false
+                        graph.start()
+                        graph.nextState = "prepareGame"
+                        break
+                    case "posttest":
+                        informationScreen.visible = false
+                        graph.start()
                         graph.nextState = "end"
+                        break
+                    case "endGame":
+                        globalStates.state = "posttest"
                         break
                     case "tutorialIntro":
                         tutoStates.state = "intro"
                         break
                     case "endRound":
-                        startFoodChain()
+                        if(rounds==maxRounds/2){
+                            globalStates.state = "midtest"
+                            buttonStart.text = "Continue"
+                        }
+                        else{
+                            startFoodChain()
+                        }
                         break
                     case "end":
                         finish()
                         break
                     case "":
+                        //tutoStates.state = "intro"
                         globalStates.state = "demoQuestion"
+                        //startFoodChain()
                         break
                     default:startFoodChain()
                     }
@@ -879,7 +929,7 @@ Window {
                     onClicked:{
                         var log=[genderquestion.gender(),age.value]
                         fileio.write(window.qlogfilename, log.join(","));
-                        globalStates.state = "test"
+                        globalStates.state = "pretest"
                     }
             }
     }
