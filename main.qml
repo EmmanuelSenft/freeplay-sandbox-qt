@@ -607,6 +607,12 @@ Window {
             }
             onXChanged: if(visible) publish()
         }
+        Timer {
+            interval: 3000; running: true; repeat: false
+            onTriggered: {
+                initSandtray()
+            }
+        }
     }
 
     RosStringPublisher {
@@ -618,7 +624,7 @@ Window {
         topic: "sandtray/interaction_events"
         onTextChanged: {
             if(text === "supervisor_ready" || text === "analyser_ready")
-                publishItems();
+                initSandtray();
         }
     }
 
@@ -994,7 +1000,8 @@ Window {
         lifePub.publish()
     }
 
-    function publishItems(){
+    function initSandtray(){
+        drawingarea.publish()
         var message = "characters"
         var items = interactiveitems.getActiveItems()
         for(var i = 0; i < items.length; i++)

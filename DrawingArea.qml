@@ -42,22 +42,17 @@ Item {
         }
 
         Component.onCompleted: {
-
-
+            
         }
 
-
-        Timer {
-            interval: 3000; running: true; repeat: false
-            onTriggered: {
-                drawingPublisher.publish();
-            }
-        }
         onHeightChanged: {
             drawingPublisher.publish();
         }
         onWidthChanged: {
             drawingPublisher.publish();
         }
+    }
+    function publish(){
+        drawingPublisher.publish();
     }
 }
