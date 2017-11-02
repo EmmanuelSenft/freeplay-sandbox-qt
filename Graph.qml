@@ -81,6 +81,12 @@ Item {
                 moving = false
                 var obj = images.childAt(mouseX, mouseY)
                 if (obj !== null && obj.name !== lastArrow.origin.name){
+                    for(var i=arrows.children.length-2;i>=0;i--){
+                        if(arrows.children[i].origin.name === lastArrow.origin.name && arrows.children[i].end.name === obj.name){
+                            lastArrow.destroy()
+                            return
+                        }
+                    }
                     lastArrow.end=obj
                     lastArrow.paint()
                     lastArrow.buttonVisible=true
