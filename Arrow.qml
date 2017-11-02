@@ -6,7 +6,7 @@ Item {
 
     property var origin: null
     property var end: null
-    property color color: "red"
+    property color color: "black"
     property bool buttonVisible: false
     z:10
     visible: true
