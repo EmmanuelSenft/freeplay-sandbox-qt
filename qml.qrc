@@ -41,5 +41,6 @@
         <file>Graph.qml</file>
         <file>Arrow.qml</file>
         <file>res/wheat.png</file>
+        <file>res/mouth.png</file>
     </qresource>
 </RCC>

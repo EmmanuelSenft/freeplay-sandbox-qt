@@ -19,7 +19,7 @@ Item {
         property var path: []
         property double angle: 0
 
-        property int arrowHeadLength: 40 //px
+        property int arrowHeadLength: 75 //px
 
         onPaint: {
             var i = 0;
@@ -30,13 +30,16 @@ Item {
             else
 
             angle = -Math.atan2(p2.x-p1.x,p2.y-p1.y)+Math.PI/2
-            p2.x -=arrowHeadLength*Math.cos(angle);
-            p2.y -=arrowHeadLength*Math.sin(angle);
+            p2.x -= (arrowHeadLength + 15) * Math.cos(angle);
+            p2.y -= (arrowHeadLength + 15) * Math.sin(angle);
+
+            mouth.rotation = angle / Math.PI * 180 - 45
+            mouth.x=p2.x-mouth.width/2+mouth.width/2*Math.cos(angle)
+            mouth.y=p2.y-mouth.width/2+mouth.width/2*Math.sin(angle)
 
             var ctx = canvas.getContext('2d');
 
             ctx.reset();
-
             ctx.lineJoin = "round"
             ctx.lineCap="round";
 
@@ -54,16 +57,17 @@ Item {
 
             ctx.stroke();
 
-            ctx.beginPath();
-            ctx.translate(p2.x, p2.y);
-            ctx.rotate(angle);
-            ctx.lineTo(0, 20);
-            ctx.lineTo(arrowHeadLength, 0);
-            ctx.lineTo(0, - 20);
             ctx.closePath();
             ctx.fill();
         }
     }
+    Image{
+        id: mouth
+        fillMode: Image.PreserveAspectFit
+        source: "res/mouth.png"
+        width: 75
+    }
+
     function paint(){
         canvas.requestPaint()
     }
