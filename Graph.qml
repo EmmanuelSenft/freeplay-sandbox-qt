@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.1
 Item {
     property string text: ""
     property var imageNames: ['flower', 'dragonfly', 'bird', 'wolf', 'butterfly', 'wheat', 'apple', 'rat', 'grasshopper', 'eagle', 'fly', 'frog', 'snake']
+    property var targets: ['flower', 'wheat', 'apple']
     property string nextState: "tutorialIntro"
     property bool ready: false
     id: graph
@@ -61,6 +62,8 @@ Item {
         onPressed: {
             var obj = images.childAt(mouseX, mouseY)
             if (obj !== null){
+                if(obj.target)
+                    return
                 var component = Qt.createComponent("Arrow.qml")
                 lastArrow = component.createObject(arrows,{"origin":obj, "end":Qt.point(mouseX,mouseY)})
                 moving = true
