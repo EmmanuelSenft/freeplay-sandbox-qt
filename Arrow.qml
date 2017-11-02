@@ -33,6 +33,8 @@ Item {
             angle = -Math.atan2(p2.x-p1.x,p2.y-p1.y)+Math.PI/2
             p2.x -= (arrowHeadLength + 15) * Math.cos(angle);
             p2.y -= (arrowHeadLength + 15) * Math.sin(angle);
+            p1.x += 50 * Math.cos(angle)
+            p1.y += 50 * Math.sin(angle)
             deleteButton.x=(p1.x+p2.x)/2-deleteButton.radius
             deleteButton.y=(p1.y+p2.y)/2-deleteButton.radius
 

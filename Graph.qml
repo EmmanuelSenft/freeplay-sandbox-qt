@@ -53,12 +53,6 @@ Item {
         }
     }
 
-    Item {
-        id:arrows
-        visible: true
-        anchors.fill:parent
-    }
-
     MouseArea {
         anchors.fill: parent
         property bool moving: false
