@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.1
 
 Item {
     property string text: ""
-    property var imageNames: ['flower', 'dragonfly', 'bird', 'wolf', 'butterfly', 'wheat', 'apple', 'rat', 'grasshopper', 'eagle', 'fly', 'frog', 'snake']
+    property var imageNames: ['flower', 'fly', 'bird', 'wolf', 'butterfly', 'wheat', 'dragonfly', 'rat', 'grasshopper', 'eagle', 'apple', 'frog', 'snake']
     property var targets: ['flower', 'wheat', 'apple']
     property string nextState: "tutorialIntro"
     property bool ready: false
@@ -129,20 +129,39 @@ Item {
     function prepare() {
         for(var i=images.children.length-1;i>=0;i--)
             images.children[i].destroy()
-         var offset = 250
-         var radiusHeight=(graph.height-instructionScreen.height-offset)/2
-         var radiusWidth=(graph.width-offset)/2
-         for(var i=0; i<imageNames.length;i++){
-             var string = "import QtQuick 2.0; Image{property string name: \""+imageNames[i]+"\"}"
- //+ ";width:100;image:/res/"+imageNames[i]+".png ; x:"+radius*Math.cos(2*Math.PI*i/imageNames.length)+parent.width/2 +"; y: "+radius*Math.sin(2*Math.PI*i/imageNames.length)+parent.height/2+"
-             var obj = Qt.createQmlObject(string, images)
-             obj.height = offset-50
-             obj.fillMode = Image.PreserveAspectFit
-             obj.source = "/res/"+imageNames[i]+".png"
-             obj.x = radiusWidth*Math.cos(2*Math.PI*i/imageNames.length)+graph.width/2-offset/4
-             obj.y = radiusHeight*Math.sin(2*Math.PI*i/imageNames.length)+(graph.height+instructionScreen.height)/2-offset/2
+        var offset = 250
+        //Parameters ellipse
+        var b=(graph.height-instructionScreen.height-offset)/2
+        var a=(graph.width-offset)/2
+        var h = (a-b)*(a-b)/(a+b)*(a+b)
+        var perimeter = Math.PI*(a+b)*3*h/((Math.sqrt(3*h+4)+10))
+        for(var i=0; i<imageNames.length;i++){
+            var component = Qt.createComponent("ImageGraph.qml")
+            var obj = component.createObject(images,{"name":imageNames[i]})
+            obj.height = offset-50
+            obj.width = offset-50
+            var theta = angleOnEllipse(i,imageNames.length,perimeter,a,b)
+            obj.x = a*Math.cos(theta)+graph.width/2-offset/4
+            obj.y = b*Math.sin(theta)+(graph.height+instructionScreen.height)/2-offset/2
+            if(targets.indexOf(imageNames[i])>=0)
+                obj.target = true
          }
          ready=true
+    }
+
+    function angleOnEllipse(n,N,p,a,b){
+        var increments = 10000
+        var theta = 0
+        var dtheta = 2*Math.PI/increments
+        var partialp = 0
+        var target = 2*n/N*p
+        for(var i = 0; i < increments ;i++){
+            if(partialp>target){
+                return theta
+            }
+            partialp += Math.sqrt(Math.pow(a*Math.sin(theta),2)+Math.pow(b*Math.cos(theta),2))
+            theta+=dtheta
+        }
     }
 
     function start() {
