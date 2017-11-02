@@ -9,6 +9,7 @@ Item {
     property var targets: ['flower', 'wheat', 'apple']
     property string nextState: "tutorialIntro"
     property bool ready: false
+    property var startingTime: 0
     id: graph
     anchors.fill:parent
     visible: false
@@ -148,20 +149,22 @@ Item {
         if(ready == false)
             prepare()
         graph.visible = true
-        }
+        var d = new Date()
+        startingTime = d.getTime()
+    }
 
     function stop() {
-        globalStates.state = nextState
-        graph.visible = false
-        fileio.write(window.qlogfilename,"test")
-        //Could potentially log time too
+        var d = new Date()
+        var log = [globalStates.state, startingTime,d.getTime()]
+        fileio.write(window.qlogfilename, log.join(","));
         for(var i=arrows.children.length-1;i>=0;i--){
-            var log=[arrows.children[i].origin.name, arrows.children[i].end.name]
+            var log=[globalStates.state,arrows.children[i].origin.name, arrows.children[i].end.name]
             arrows.children[i].destroy()
             fileio.write(window.qlogfilename, log.join(","));
         }
+        globalStates.state = nextState
+        graph.visible = false
     }
-
 /*
     Arrow {
         id: arrow
