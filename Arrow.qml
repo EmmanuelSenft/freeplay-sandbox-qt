@@ -7,6 +7,7 @@ Item {
     property var origin: null
     property var end: null
     property color color: "red"
+    property bool buttonVisible: false
     z:10
     visible: true
     anchors.fill: parent
@@ -32,6 +33,8 @@ Item {
             angle = -Math.atan2(p2.x-p1.x,p2.y-p1.y)+Math.PI/2
             p2.x -= (arrowHeadLength + 15) * Math.cos(angle);
             p2.y -= (arrowHeadLength + 15) * Math.sin(angle);
+            deleteButton.x=(p1.x+p2.x)/2-deleteButton.radius
+            deleteButton.y=(p1.y+p2.y)/2-deleteButton.radius
 
             mouth.rotation = angle / Math.PI * 180 - 45
             mouth.x=p2.x-mouth.width/2+mouth.width/2*Math.cos(angle)
@@ -66,6 +69,34 @@ Item {
         fillMode: Image.PreserveAspectFit
         source: "res/mouth.png"
         width: 75
+    }
+
+
+    Rectangle{
+        id: deleteButton
+        width: 40
+        height: width
+        radius: width/2
+        color: "red"
+        border.color: "black"
+        border.width: width / 10
+        visible: buttonVisible
+        Label{
+            anchors.fill: parent
+            horizontalAlignment: Label.AlignHCenter
+            verticalAlignment: Label.AlignVCenter
+            font.pixelSize: 20
+            font.bold: true
+            text: "X"
+        }
+        MouseArea{
+            anchors.fill: parent
+            onClicked: {
+                origin.arrows -= 1
+                arrow.destroy()
+                testReady()
+            }
+        }
     }
 
     function paint(){

@@ -85,6 +85,7 @@ Item {
                 if (obj !== null && obj.name !== lastArrow.origin.name){
                     lastArrow.end=obj
                     lastArrow.paint()
+                    lastArrow.buttonVisible=true
                 }
                 else{
                     lastArrow.destroy()
@@ -93,33 +94,11 @@ Item {
         }
     }
 
-    Rectangle{
-        id: undoButton
-        anchors.left: parent.left
-        anchors.leftMargin: parent.width/20
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: parent.width/20
-        width: parent.width/15
-        height: width
-        radius: width/2
-        color: "red"
-        border.color: "black"
-        border.width: width / 10
-        Label{
-            anchors.fill: parent
-            horizontalAlignment: Label.AlignHCenter
-            verticalAlignment: Label.AlignVCenter
-            font.pixelSize: 20
-            font.bold: true
-            text: "Undo"
-        }
-        MouseArea{
-            anchors.fill: parent
-            onClicked: {
-                if(arrows.children.length>0)
-                    arrows.children[arrows.children.length-1].destroy()
-            }
-        }
+
+    Item {
+        id:arrows
+        visible: true
+        anchors.fill:parent
     }
 
     Rectangle{
