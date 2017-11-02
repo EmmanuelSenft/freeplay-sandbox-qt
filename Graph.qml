@@ -90,6 +90,8 @@ Item {
                     lastArrow.end=obj
                     lastArrow.paint()
                     lastArrow.buttonVisible=true
+                    lastArrow.origin.arrows += 1
+                    testReady()
                 }
                 else{
                     lastArrow.destroy()
@@ -117,6 +119,7 @@ Item {
         color: "green"
         border.color: "black"
         border.width: width / 10
+        visible: false
         Label{
             anchors.fill: parent
             horizontalAlignment: Label.AlignHCenter
@@ -132,6 +135,19 @@ Item {
             }
         }
     }
+
+    function testReady(){
+        for(var i=images.children.length-1;i>=0;i--){
+            if(targets.indexOf(images.children[i].name)>=0)
+                continue
+            if(images.children[i].arrows === 0){
+                continueButton.visible = false
+                return
+            }
+        }
+        continueButton.visible = true
+    }
+
     function prepare() {
         for(var i=images.children.length-1;i>=0;i--)
             images.children[i].destroy()
