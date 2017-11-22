@@ -81,9 +81,4 @@ Item {
             pixelscale: sandbox.pixel2meter
         }
     }
-
-    function isIn(tx, ty) {
-        return (tx > x) && (tx < x + width) && (ty > y) && (ty < y + height);
-    }
-
 }

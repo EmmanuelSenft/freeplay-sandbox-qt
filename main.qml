@@ -951,7 +951,7 @@ Window {
                             }
                     }
                     onClicked:{
-                        var log=[genderquestion.gender(),age.value]
+                        var log=["demo",genderquestion.gender(),age.value]
                         fileio.write(window.qlogfilename, log.join(","));
                         globalStates.state = "pretest"
                     }
@@ -1138,7 +1138,7 @@ Window {
         interactiveitems.hideItems(interactiveitems.getActiveItems())
         var d = new Date()
         var n = d.getTime() - sandbox.startingTime
-        var log=[n,sandbox.points]
+        var log=["Round"+rounds,n,sandbox.points]
         fileio.write(window.qlogfilename, log.join(","));
         totalPoints += sandbox.points
     }
@@ -1223,7 +1223,7 @@ Window {
             if(sentence != ""){
                 instructionScreen.text = sentence
                 blockingSpeech.text = sentence
-                defaultSay.start()
+                defaultSay.restart()
             }
         }
         Timer {
