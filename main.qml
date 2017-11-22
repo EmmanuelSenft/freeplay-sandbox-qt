@@ -1284,6 +1284,11 @@ Window {
                     case "feedFrog":
                         repeatInstructions.restart()
                         break
+                    //case "endTuto":
+                    //    interactiveitems.hideItems(interactiveitems.getStaticItems())
+                    //    interactiveitems.hideItems(interactiveitems.getActiveItems())
+                    //    globalStates.state = "prepareGame"
+                    //    break
                     case "deadAnimal":
                         setupTutorial()
                         if(tutorial.flyFed)
