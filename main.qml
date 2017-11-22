@@ -1091,6 +1091,10 @@ Window {
         sleep(100)
 
         publishLife()
+
+        sleep(100)
+        if(globalStates.state === "game")
+            interactionEventsPub.text = "running_"+rounds+"_"+maxRounds
     }
 
     function sleep(milliseconds) {
@@ -1311,16 +1315,18 @@ Window {
             tutorial.setupTutorial()
             frog.movable = true
             fly.movable = true
-
         }
-
-
+        if(globalStates.state === "game")
+            interactionEventsPub.text = "animaldead_"+name
     }
+
     function animalEating(name){
         if(tutoStates.state === "feedFly" && name === "fly")
             tutoStates.state = "feedFrog"
         if(tutoStates.state === "feedFrog" && name === "frog")
             tutoStates.state = "endTuto"
+        if(globalStates.state === "game")
+            interactionEventsPub.text = "animaleats_"+name
     }
 
     RosStringPublisher {
