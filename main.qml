@@ -552,17 +552,17 @@ Window {
 
         Item {
             id: instructionScreen
-            anchors.fill: parent
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: parent.height/10
+            width: 2 * parent.width / 3
+            height: parent.height / 3
             visible: false
             property string text: ""
             z: 4
 
             Rectangle {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.top
-                anchors.topMargin: parent.height/10
-                width: 2 * parent.width / 3
-                height: parent.height / 4
+                anchors.fill: parent
                 color: "AliceBlue"
                 border.color: "black"
                 border.width: width/100
@@ -577,6 +577,30 @@ Window {
                     text: instructionScreen.text
                     wrapMode: Text.WordWrap
                 }
+            }
+        }
+        Button {
+            id: endTutoButton
+            z:5
+            width: instructionScreen.width/3
+            height: instructionScreen.height/6
+            anchors.horizontalCenter: instructionScreen.horizontalCenter
+            anchors.verticalCenter: instructionScreen.verticalCenter
+            anchors.verticalCenterOffset: instructionScreen.height/3
+            visible: false
+            text: "Continue to the game"
+            style: ButtonStyle {
+                label: Text {
+                    font.family: "Helvetica"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    font.pointSize: 30
+                    text: endTutoButton.text
+                }
+            }
+            onClicked: {
+                if(tutoStates.state === "endTuto")
+                    tutorial.finishTuto()
             }
         }
 
@@ -1190,7 +1214,7 @@ Window {
                         break
                     case "endTuto":
                         tutorial.sentence = "Excellent! But becareful, when an animal has no energy, it dies. Let's start the game when you are ready."
-                        hunger.running = false
+                        endTutoButton.visible = true
                         break
                 }
             }
@@ -1256,19 +1280,22 @@ Window {
                     case "feedFrog":
                         repeatInstructions.restart()
                         break
-                    case "endTuto":
-                        interactiveitems.hideItems(interactiveitems.getStaticItems())
-                        interactiveitems.hideItems(interactiveitems.getActiveItems())
-                        globalStates.state = "prepareGame"
-                        break
                     case "deadAnimal":
                         setupTutorial()
                         if(tutorial.flyFed)
                             tutoStates.state = "feedFrog"
                         else
                             tutoStates.state = "feedFly"
+                        break
                 }
             }
+        }
+        function finishTuto(){
+            interactiveitems.hideItems(interactiveitems.getStaticItems())
+            interactiveitems.hideItems(interactiveitems.getActiveItems())
+            hunger.running = false
+            globalStates.state = "prepareGame"
+            endTutoButton.visible = false
         }
     }
 
@@ -1278,6 +1305,13 @@ Window {
             tutoStates.state = "deadAnimal"
             if(tutorial.flyFed && name === "frog")
                 tutorial.deadFrog = true
+        }
+        if(tutoStates.state === "endTuto"){
+            tutorial.sentence = "For the tutorial, animals revive, but not for the real game, be careful."
+            tutorial.setupTutorial()
+            frog.movable = true
+            fly.movable = true
+
         }
 
 
