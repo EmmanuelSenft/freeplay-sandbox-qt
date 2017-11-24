@@ -1061,12 +1061,12 @@ Window {
     }
 
     function publishLife(){
-        var items = interactiveitems.getActiveItems()
+        var items = interactiveitems.getStaticItems()
         var list=[]
         for(var i = 0; i < items.length; i++){
             list.push(items[i].life/items[i].initialLife)
         }
-        items = interactiveitems.getStaticItems()
+        items = interactiveitems.getActiveItems()
         for(var i = 0; i < items.length; i++){
             list.push(items[i].life/items[i].initialLife)
         }
