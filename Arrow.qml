@@ -62,7 +62,12 @@ Item {
             ctx.lineTo(p2.x, p2.y);
 
             ctx.stroke();
-
+            ctx.beginPath();
+            ctx.translate(p2.x, p2.y);
+            ctx.rotate(angle);
+            ctx.lineTo(0, 20);
+            ctx.lineTo(arrowHeadLength, 0);
+            ctx.lineTo(0, - 20);
             ctx.closePath();
             ctx.fill();
         }
@@ -71,6 +76,7 @@ Item {
         id: mouth
         fillMode: Image.PreserveAspectFit
         source: "res/mouth.png"
+        visible: false
         width: 75
     }
 
