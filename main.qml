@@ -907,10 +907,10 @@ Window {
                                     id: age
                                     width: 1000
                                     tickmarksEnabled: false
-                                    minimumValue: 4
-                                    value: 5
+                                    minimumValue: 6
+                                    value: 8
                                     stepSize: 1
-                                    maximumValue: 8
+                                    maximumValue: 10
                                     style: SliderStyle {
                                             handle: Rectangle {
                                                     width: 60
