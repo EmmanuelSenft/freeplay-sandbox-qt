@@ -1179,6 +1179,9 @@ Window {
                 },
                 State {
                     name: "endTuto"
+                },
+                State {
+                    name: "done"
                 }
 
             ]
@@ -1304,6 +1307,7 @@ Window {
             interactiveitems.hideItems(interactiveitems.getActiveItems())
             hunger.running = false
             globalStates.state = "prepareGame"
+            tutoStates.state = "done"
             endTutoButton.visible = false
         }
     }
