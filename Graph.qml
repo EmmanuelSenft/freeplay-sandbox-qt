@@ -201,9 +201,14 @@ Item {
         for(var i=arrows.children.length-1;i>=0;i--){
             var log=[globalStates.state,arrows.children[i].origin.name, arrows.children[i].end.name]
             arrows.children[i].destroy()
+            arrows.children[i].origin.arrows -= 1
             fileio.write(window.qlogfilename, log.join(","));
         }
         globalStates.state = nextState
         graph.visible = false
+    }
+
+    onVisibleChanged: {
+        testReady()
     }
 }
