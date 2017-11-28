@@ -67,18 +67,27 @@ Window {
             },
             State {
                     name: "endRound"
+                    StateChangeScript{
+                        script: buttonStart.show()
+                    }
             },
             State {
                     name: "prepareGame"
                     PropertyChanges { target: informationScreen; visible: true}
                     PropertyChanges { target: instructionScreen; visible: false}
                     PropertyChanges { target: informationScreen; text: "You have keep all the animals alive as long as possible! \n\n Now feed them!"}
+                    StateChangeScript{
+                        script: buttonStart.show()
+                    }
             },
             State {
                     name: "tutorialIntro"
                     PropertyChanges { target: informationScreen; visible: true}
                     PropertyChanges { target: informationScreen; text: "Let's practise the game now."}
                     PropertyChanges { target: buttonStart; text: "Start"}
+                    StateChangeScript{
+                        script: buttonStart.show()
+                    }
             },
             State {
                     name: "tutorial"
@@ -86,6 +95,9 @@ Window {
             },
             State {
                     name: "endGame"
+                    StateChangeScript{
+                        script: buttonStart.show()
+                    }
             },
             State {
                     name: "end"
@@ -100,17 +112,17 @@ Window {
                 case "pretest":
                     informationScreen.visible = true
                     informationScreen.text = "We will start by connecting the animals to their food."
-                    buttonStart.visible = true
+                    buttonStart.show()
                     break
                 case "midtest":
                     console.log("in")
                     informationScreen.text = "Let's try to connect again the animals to their food."
-                    buttonStart.visible = true
+                    buttonStart.show()
                     console.log(informationScreen.text)
                     break
                 case "posttest":
                     informationScreen.text = "Let's connect the animals to their food a last time."
-                    buttonStart.visible = true
+                    buttonStart.show()
                     break
                 case "endGame":
                     buttonStart.text = "Continue"
@@ -595,6 +607,17 @@ Window {
                     text: endTutoButton.text
                 }
             }
+            function show(){
+                timerShowEndTutoButton.restart()
+            }
+
+            Timer{
+                id: timerShowEndTutoButton
+                interval: 3000
+                repeat: false
+                onTriggered: endTutoButton.visible = true
+            }
+
             onClicked: {
                 if(tutoStates.state === "endTuto")
                     tutorial.finishTuto()
@@ -727,6 +750,7 @@ Window {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: parent.height/3
                 text: "Start"
+                visible: true
                 style: ButtonStyle {
                     label: Text {
                         font.family: "Helvetica"
@@ -736,7 +760,18 @@ Window {
                         text: buttonStart.text
                     }
                 }
+                function show(){
+                    timerShow.restart()
+                }
+                Timer{
+                    id: timerShow
+                    interval: 3000
+                    repeat: false
+                    onTriggered: buttonStart.visible=true
+                }
+
                 onClicked: {
+                    visible = false
                     //if(globalStates.state == "")
                     //    tutorial.practice()
                     //else
@@ -1225,11 +1260,12 @@ Window {
                         break
                     case "endTuto":
                         tutorial.sentence = "Excellent! But becareful, when an animal has no energy, it dies. Let's start the game when you are ready."
-                        endTutoButton.visible = true
+                        endTutoButton.show()
                         break
                 }
             }
         }
+
         onSentenceChanged: {
             if(sentence != ""){
                 instructionScreen.text = sentence
