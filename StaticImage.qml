@@ -71,8 +71,8 @@ Item {
         var good=false
         while(!good){
             good=true
-            x = drawingarea.width * (.1 + 0.8 * Math.random())
-            y = drawingarea.height * (.1 + 0.8 * Math.random())
+            x = drawingarea.width * (.05 + 0.8 * Math.random())
+            y = drawingarea.height * (.05 + 0.8 * Math.random())
             var list = interactiveitems.getActiveItems()
             for(var i=0 ; i < list.length; i++){
                var dist = Math.pow(x-list[i].x,2)+Math.pow(y-list[i].y,2)
@@ -95,6 +95,14 @@ Item {
         var angle = Math.PI/2 * (Math.random() - 0.5)
         x=item.x+80*Math.cos(angle)
         y=item.y+80*Math.sin(angle)
+        if(x<0)
+            x=0
+        if(x>drawingarea.width-width)
+            x=drawingarea.width-width
+        if(y<0)
+            y=0
+        if(y>drawingarea.height-height)
+            y=drawingarea.height-height
         visible = true
     }
 
