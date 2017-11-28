@@ -83,7 +83,7 @@ Window {
             State {
                     name: "tutorialIntro"
                     PropertyChanges { target: informationScreen; visible: true}
-                    PropertyChanges { target: informationScreen; text: "We will start by practising the game."}
+                    PropertyChanges { target: informationScreen; text: "Let's practise the game now."}
                     PropertyChanges { target: buttonStart; text: "Start"}
             },
             State {
@@ -698,6 +698,10 @@ Window {
         visible: true
         property string text: "Welcome to the food chain game, \n We will start with some questions."
         z: 10
+        onTextChanged: {
+            if (visible)
+                blockingSpeech.text = text
+        }
 
         Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -1191,7 +1195,7 @@ Window {
                 switch (tutoStates.state){
                     case "intro":
                         tutorial.setupTutorial()
-                        tutorial.sentence = "Hello, welcome to the game. The goal is to keep all the animals alive as long as possible."
+                        tutorial.sentence = "Welcome to the game. The goal is to keep all the animals alive as long as possible."
                         tutorial.introduced = true
                         break
                     case "goal":
