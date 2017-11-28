@@ -142,7 +142,7 @@ InteractiveItem {
             sandbox.livingAnimals--
             visible = false
             scale = initialScale
-            itemDying(name)
+            animalDying(name)
         }
     }
 

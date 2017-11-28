@@ -1316,7 +1316,7 @@ Window {
         }
     }
 
-    function itemDying(name){
+    function animalDying(name){
         if(tutoStates.state !== "" && tutoStates.state !== "endTuto" && tutoStates.state !== "done" && tutoStates.state !== "deadAnimal" &&  (name === "frog" || name === "fly")){
             tutoStates.state = "deadAnimal"
             if(tutorial.flyFed && name === "frog")
@@ -1330,6 +1330,11 @@ Window {
         }
         if(globalStates.state === "game")
             interactionEventsPub.text = "animaldead_"+name
+    }
+
+    function targetDying(name){
+        if(globalStates.state === "game")
+            interactionEventsPub.text = "targetdead_"+name
     }
 
     function animalEating(name){
