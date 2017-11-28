@@ -52,10 +52,6 @@ Window {
                 PropertyChanges { target: drawingarea; visible: false}
             },
             State {
-                    name: "pretest"
-                    PropertyChanges { target: informationScreen; visible: true}
-            },
-            State {
                     name: "midtest"
                     PropertyChanges { target: informationScreen; visible: true}
                     PropertyChanges { target: informationScreen; text: "Let's try to connect again the animals to their food."}
@@ -71,8 +67,6 @@ Window {
             },
             State {
                     name: "endRound"
-                    PropertyChanges { target: informationScreen; visible: true}
-                    PropertyChanges { target: informationScreen; text: "Three animals died, so the game stops. \n You finished with " + Math.round(sandbox.points) +" points. \n Well done!"}
             },
             State {
                     name: "prepareGame"
@@ -92,11 +86,10 @@ Window {
             },
             State {
                     name: "endGame"
-                    PropertyChanges { target: buttonStart; text: "Continue"}
-                    PropertyChanges { target: informationScreen; text: "This is the end of the game. \nYou achieved a total " + Math.round(totalPoints) +" points. \nWell done!"}
             },
             State {
                     name: "end"
+                    PropertyChanges { target: informationScreen; visible: "true"}
                     PropertyChanges { target: informationScreen; text: "Thank you for having played the game!"}
                     PropertyChanges { target: buttonStart; visible: "false"}
             }
@@ -105,6 +98,7 @@ Window {
         onStateChanged: {
             switch (globalStates.state){
                 case "pretest":
+                    informationScreen.visible = true
                     informationScreen.text = "We will start by connecting the animals to their food."
                     buttonStart.visible = true
                     break
@@ -126,6 +120,9 @@ Window {
                         buttonStart.text = "Continue"
                     else
                         buttonStart.text = "Try again"
+                    break
+                case "endGame":
+                    buttonStart.text = "Continue"
                     break
             }
         }
@@ -1114,14 +1111,6 @@ Window {
         interactionEventsPub.text = "stop"
         hunger.running = false
         rounds++
-        if(rounds == maxRounds){
-            globalStates.state = "endGame"
-            interactionEventsPub.text = "endGame"
-        }
-        else{
-            globalStates.state = "endRound"
-            interactionEventsPub.text = "endround"
-        }
 
         var finished = false
         var items = interactiveitems.getActiveItems()
@@ -1136,19 +1125,30 @@ Window {
                     lifes[i] -= 0.01
                     finished = false
                     sandbox.points += lifes[i]
-                    console.log("life "+lifes[i] +"-" +sandbox.points)
-
                 }
             }
         }
+        totalPoints += sandbox.points
 
+        if(rounds == maxRounds){
+            console.log("end game")
+            globalStates.state = "endGame"
+            interactionEventsPub.text = "endGame"
+            informationScreen.visible = true
+            informationScreen.text = "This is the end of the game. \nYou achieved a total " + Math.round(totalPoints) +" points. \nWell done!"
+        }
+        else{
+            globalStates.state = "endRound"
+            interactionEventsPub.text = "endround"
+            informationScreen.visible = true
+            informationScreen.text="Three animals died, so the game stops. \n You finished with " + Math.round(sandbox.points) +" points. \n Well done!"
+        }
         interactiveitems.hideItems(interactiveitems.getStaticItems())
         interactiveitems.hideItems(interactiveitems.getActiveItems())
         var d = new Date()
         var n = d.getTime() - sandbox.startingTime
         var log=["Round"+rounds,n,sandbox.points]
         fileio.write(window.qlogfilename, log.join(","));
-        totalPoints += sandbox.points
     }
 
     Item{
@@ -1317,8 +1317,7 @@ Window {
     }
 
     function itemDying(name){
-        console.log("")
-        if(tutoStates.state !== "" && tutoStates.state !== "endTuto" && tutoStates.state !== "deadAnimal" &&  (name === "frog" || name === "fly")){
+        if(tutoStates.state !== "" && tutoStates.state !== "endTuto" && tutoStates.state !== "done" && tutoStates.state !== "deadAnimal" &&  (name === "frog" || name === "fly")){
             tutoStates.state = "deadAnimal"
             if(tutorial.flyFed && name === "frog")
                 tutorial.deadFrog = true
