@@ -27,11 +27,6 @@ Window {
     property int totalPoints: 0
     property int animalLimit: 7
 
-    Component.onCompleted: {
-        var d = new Date()
-        qlogfilename = "logFoodChain/foodchain-" + d.toISOString() + ".csv"
-    }
-
     onWidthChanged: {
         prevWidth=width;
     }
@@ -104,6 +99,9 @@ Window {
                     PropertyChanges { target: informationScreen; visible: "true"}
                     PropertyChanges { target: informationScreen; text: "Thank you for having played the game!"}
                     PropertyChanges { target: buttonStart; visible: "false"}
+                    StateChangeScript{
+                        script: interactionEventsPub.text = "stoprecord"
+                    }
             }
 
         ]
@@ -678,7 +676,8 @@ Window {
             onXChanged: if(visible) publish()
         }
         Timer {
-            interval: 3000; running: true; repeat: false
+            id: initTimer
+            interval: 1000; running: true; repeat: false
             onTriggered: {
                 initSandtray()
             }
@@ -810,9 +809,7 @@ Window {
                         finish()
                         break
                     case "":
-                        //tutoStates.state = "intro"
-                        globalStates.state = "demoQuestion"
-                        //startFoodChain()
+                        start()
                         break
                     default:startFoodChain()
                     }
@@ -1111,7 +1108,7 @@ Window {
     }
 
     function initSandtray(){
-        drawingarea.publish()
+        //drawingarea.publish()
         var message = "characters"
         var items = interactiveitems.getActiveItems()
         for(var i = 0; i < items.length; i++)
@@ -1396,5 +1393,17 @@ Window {
                 tutorial.sentenceIn(text.split("-")[1])
             }
         }
+    }
+
+    function start(){
+        interactionEventsPub.text = "record"
+        initTimer.start()
+        var d = new Date()
+        qlogfilename = "logFoodChain/foodchain-" + d.toISOString().split(".")[0] + ".csv"
+
+        //globalStates.state = "pretest"
+        //tutoStates.state = "intro"
+        //globalStates.state = "demoQuestion"
+        startFoodChain()
     }
 }
