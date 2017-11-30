@@ -1399,7 +1399,7 @@ Window {
         interactionEventsPub.text = "record"
         initTimer.start()
         var d = new Date()
-        qlogfilename = "logFoodChain/foodchain-" + d.toISOString().split(".")[0] + ".csv"
+        qlogfilename = "foodchain-data/logs/" + d.toISOString().split(".")[0] + ".csv"
 
         //globalStates.state = "pretest"
         //tutoStates.state = "intro"
