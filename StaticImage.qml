@@ -21,6 +21,26 @@ Item {
     property string type: ""
     property string image: "res/"+type+".png"
     property int epsilon: 20
+    property double bbScale: 1.0
+    property point bbOrigin: Qt.point(width/2, height/2)
+    property double bbRadius: bbScale * width/2
+    property var boundingbox:
+    Polygon {
+                id:bbpoly
+                vertices: [
+                    Qt.point(bbOrigin.x + bbRadius, bbOrigin.y),
+                    Qt.point(bbOrigin.x + 0.7 * bbRadius, bbOrigin.y + 0.7 * bbRadius),
+                    Qt.point(bbOrigin.x, bbOrigin.y + bbRadius),
+                    Qt.point(bbOrigin.x - 0.7 * bbRadius, bbOrigin.y + 0.7 * bbRadius),
+                    Qt.point(bbOrigin.x - bbRadius, bbOrigin.y),
+                    Qt.point(bbOrigin.x - 0.7 * bbRadius, bbOrigin.y - 0.7 * bbRadius),
+                    Qt.point(bbOrigin.x, bbOrigin.y - bbRadius),
+                    Qt.point(bbOrigin.x + 0.7 * bbRadius, bbOrigin.y - 0.7 * bbRadius)
+                ]
+                density: 1
+                friction: 1
+                restitution: 0.1
+            }
 
     Image {
         id: image

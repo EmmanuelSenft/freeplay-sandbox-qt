@@ -488,7 +488,7 @@ Window {
                 // wait a bit before publishing the footprints to leave Box2D the time to settle
                 Timer {
                     interval: 1000; running: true; repeat: false
-                    onTriggered: parent.targets=interactiveitems.getActiveItems()
+                    onTriggered: parent.targets=interactiveitems.getAllItems()
                 }
             }
 
@@ -497,6 +497,9 @@ Window {
             }
             function getStaticItems() {
                 return [flower1, flower2, flower3, apple1, apple2, apple3, wheat1, wheat2, wheat3]
+            }
+            function getAllItems() {
+                return [eagle, wolf, rat, snake,bird,frog,dragonfly,fly,butterfly,grasshopper,flower1, flower2, flower3, apple1, apple2, apple3, wheat1, wheat2, wheat3]
             }
 
             function hideItems(items) {
