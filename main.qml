@@ -805,7 +805,15 @@ Window {
                             buttonStart.text = "Continue"
                         }
                         else{
-                            startFoodChain()
+                            if(rounds == maxRounds){
+                                console.log("end game")
+                                globalStates.state = "endGame"
+                                interactionEventsPub.text = "endGame"
+                                informationScreen.visible = true
+                                informationScreen.text = "This is the end of the game. \nYou achieved a total " + Math.round(totalPoints) +" points. \nWell done!"
+                            }
+                            else
+                                startFoodChain()
                         }
                         break
                     case "end":
@@ -1165,19 +1173,12 @@ Window {
         }
         totalPoints += sandbox.points
 
-        if(rounds == maxRounds){
-            console.log("end game")
-            globalStates.state = "endGame"
-            interactionEventsPub.text = "endGame"
-            informationScreen.visible = true
-            informationScreen.text = "This is the end of the game. \nYou achieved a total " + Math.round(totalPoints) +" points. \nWell done!"
-        }
-        else{
-            globalStates.state = "endRound"
-            interactionEventsPub.text = "endround"
-            informationScreen.visible = true
-            informationScreen.text="Three animals died, so the game stops. \n You finished with " + Math.round(sandbox.points) +" points. \n Well done!"
-        }
+        globalStates.state = "endRound"
+        interactionEventsPub.text = "endround"
+        informationScreen.visible = true
+        informationScreen.text="Three animals died, so the game stops. \n You finished with " + Math.round(sandbox.points) +" points. \n Well done!"
+        if(rounds == maxRounds)
+            buttonStart.text="Continue"
         interactiveitems.hideItems(interactiveitems.getStaticItems())
         interactiveitems.hideItems(interactiveitems.getActiveItems())
         var d = new Date()
