@@ -24,7 +24,7 @@ Window {
     property string  qlogfilename: ""
     property int rounds: 0
     property int maxRounds: 4
-    property int totalPoints: 0
+    property double totalPoints: 0
     property int animalLimit: 7
     property bool inGame: false
 
@@ -64,7 +64,11 @@ Window {
             State {
                     name: "endRound"
                     StateChangeScript{
-                        script: buttonStart.show()
+                        script: {
+                            if(robot_hand.visible)
+                                releasetimer.start()
+                            buttonStart.show()
+                        }
                     }
             },
             State {
@@ -256,7 +260,10 @@ Window {
                 pixelscale: sandbox.pixel2meter
 
                 onPositionChanged: {
-                    if(!interactiveitems.visible) return;
+                    if(!interactiveitems.visible){
+                        releasetimer.restart()
+                        return;
+                    }
 
                     robot_hand.visible=true;
                     if (target === null) {
@@ -1153,7 +1160,6 @@ Window {
     }
 
     function endRound(){
-        interactionEventsPub.text = "stop"
         inGame = false
         hunger.running = false
         rounds++
