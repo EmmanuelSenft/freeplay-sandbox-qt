@@ -22,26 +22,29 @@ Item {
         property double angle: 0
 
         property int arrowHeadLength: 75 //px
+        property int offset: 80
 
         onPaint: {
             var i = 0;
             var p1 = {x: origin.x + origin.width/2,y:origin.y+origin.height/2}
             var p2 = {x: end.x,y:end.y}
-            if(typeof end.name !== 'undefined')
+            if(typeof end.name !== 'undefined'){
                 p2 = {x: end.x + end.width/2,y:end.y+end.height/2}
-            else
+            }
 
             angle = -Math.atan2(p2.x-p1.x,p2.y-p1.y)+Math.PI/2
-            p2.x -= (arrowHeadLength + 15) * Math.cos(angle);
-            p2.y -= (arrowHeadLength + 15) * Math.sin(angle);
-            p1.x += 50 * Math.cos(angle)
-            p1.y += 50 * Math.sin(angle)
+            p2.x -= arrowHeadLength * Math.cos(angle);
+            p2.y -= arrowHeadLength * Math.sin(angle);
+
+            if(!moving){
+                p1.x += offset * Math.cos(angle)
+                p1.y += offset * Math.sin(angle)
+                p2.x -= offset * Math.cos(angle);
+                p2.y -= offset * Math.sin(angle);
+            }
             deleteButton.x=(p1.x+p2.x)/2-deleteButton.radius
             deleteButton.y=(p1.y+p2.y)/2-deleteButton.radius
 
-            mouth.rotation = angle / Math.PI * 180 - 45
-            mouth.x=p2.x-mouth.width/2+mouth.width/2*Math.cos(angle)
-            mouth.y=p2.y-mouth.width/2+mouth.width/2*Math.sin(angle)
 
             var ctx = canvas.getContext('2d');
 
@@ -62,13 +65,20 @@ Item {
             ctx.lineTo(p2.x, p2.y);
 
             ctx.stroke();
-            ctx.beginPath();
-            ctx.translate(p2.x, p2.y);
-            ctx.rotate(angle);
-            ctx.lineTo(0, 20);
-            ctx.lineTo(arrowHeadLength, 0);
-            ctx.lineTo(0, - 20);
-            ctx.closePath();
+            if(mouth.visible){
+                mouth.rotation = angle / Math.PI * 180 - 45
+                mouth.x=p2.x-mouth.width/2+mouth.width/2*Math.cos(angle)
+                mouth.y=p2.y-mouth.width/2+mouth.width/2*Math.sin(angle)
+            }
+            else{
+                ctx.beginPath();
+                ctx.translate(p2.x, p2.y);
+                ctx.rotate(angle);
+                ctx.lineTo(0, 20);
+                ctx.lineTo(arrowHeadLength, 0);
+                ctx.lineTo(0, - 20);
+                ctx.closePath();
+            }
             ctx.fill();
         }
     }
@@ -103,6 +113,7 @@ Item {
             onClicked: {
                 origin.arrows -= 1
                 arrow.destroy()
+                events.text = "destroy_"+origin.name+"_"+end.name
                 testReady()
             }
         }

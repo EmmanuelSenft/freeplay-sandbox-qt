@@ -3,6 +3,8 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.1
 
+import Ros 1.0
+
 Item {
     property string text: ""
     property var imageNames: ['flower', 'fly', 'bird', 'wolf', 'butterfly', 'wheat', 'dragonfly', 'rat', 'grasshopper', 'eagle', 'apple', 'frog', 'snake']
@@ -13,6 +15,7 @@ Item {
     id: graph
     anchors.fill:parent
     visible: false
+    property bool moving: false
     Rectangle{
         id: background
         property string name: "background"
@@ -57,7 +60,6 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        property bool moving: false
         property var lastArrow: null
 
         onPressed: {
@@ -68,6 +70,7 @@ Item {
                 var component = Qt.createComponent("Arrow.qml")
                 lastArrow = component.createObject(arrows,{"origin":obj, "end":Qt.point(mouseX,mouseY)})
                 moving = true
+                events.text = "touched_"+obj.name
             }
         }
         onPositionChanged: {
@@ -84,6 +87,7 @@ Item {
                     for(var i=arrows.children.length-2;i>=0;i--){
                         if(arrows.children[i].origin.name === lastArrow.origin.name && arrows.children[i].end.name === obj.name){
                             lastArrow.destroy()
+                            events.text = "double"
                             return
                         }
                     }
@@ -92,9 +96,11 @@ Item {
                     lastArrow.buttonVisible=true
                     lastArrow.origin.arrows += 1
                     testReady()
+                    events.text = "create_"+lastArrow.origin.name+"_"+obj.name
                 }
                 else{
                     lastArrow.destroy()
+                    events.text = "cancel"
                 }
             }
         }
@@ -193,9 +199,11 @@ Item {
         graph.visible = true
         var d = new Date()
         startingTime = d.getTime()
+        events.text = "start"
     }
 
     function stop() {
+        events.text = "stop"
         var d = new Date()
         var log = [globalStates.state, startingTime,d.getTime()]
         fileio.write(window.qlogfilename, log.join(","));
@@ -207,6 +215,12 @@ Item {
         }
         globalStates.state = nextState
         graph.visible = false
+    }
+
+
+    RosStringPublisher {
+        id: events
+        topic: "graph"
     }
 
     onVisibleChanged: {
