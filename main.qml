@@ -26,6 +26,7 @@ Window {
     property int maxRounds: 4
     property int totalPoints: 0
     property int animalLimit: 7
+    property bool inGame: false
 
     onWidthChanged: {
         prevWidth=width;
@@ -706,6 +707,7 @@ Window {
 
         var d = new Date()
         sandbox.startingTime = d.getTime()
+        inGame = true
         sandbox.points = 0
         hunger.start()
         interactionEventsPub.text = "start_"+rounds+"_"+maxRounds
@@ -1152,6 +1154,7 @@ Window {
 
     function endRound(){
         interactionEventsPub.text = "stop"
+        inGame = false
         hunger.running = false
         rounds++
 

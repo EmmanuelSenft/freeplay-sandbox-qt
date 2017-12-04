@@ -82,7 +82,7 @@ Item {
 
             origin: mapOrigin
             parentframe: mapOrigin.name
-
+            active: inGame
             pixelscale: sandbox.pixel2meter
         }
     }
