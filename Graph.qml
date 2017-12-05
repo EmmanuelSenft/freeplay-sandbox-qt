@@ -7,7 +7,7 @@ import Ros 1.0
 
 Item {
     property string text: ""
-    property var imageNames: ['flower', 'fly', 'bird', 'wolf', 'butterfly', 'wheat', 'dragonfly', 'rat', 'grasshopper', 'eagle', 'apple', 'frog', 'snake']
+    property var imageNames: ['flower', 'fly', 'wolf', 'bird', 'butterfly', 'wheat', 'dragonfly', 'rat', 'grasshopper', 'apple', 'eagle', 'frog', 'snake']
     property var targets: ['flower', 'wheat', 'apple']
     property string nextState: "tutorialIntro"
     property bool ready: false
