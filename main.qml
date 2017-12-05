@@ -438,7 +438,7 @@ Window {
             Character {
                 id: bird
                 name: "bird"
-                food: ["dragonfly","fly"]
+                food: ["dragonfly","fly","wheat","fly","grasshoper","apple"]
                 initialScale:.9
                 predatorLevel: 1
                 collidesWith: interactiveitems.collisionCategories
@@ -460,7 +460,7 @@ Window {
             Character {
                 id: eagle
                 name: "eagle"
-                food: ["snake","rat","wolf","frog","bird"]
+                food: ["snake","rat","frog","bird"]
                 initialScale:1.5
                 predatorLevel: 5
                 collidesWith: interactiveitems.collisionCategories
@@ -468,7 +468,7 @@ Window {
             Character {
                 id: rat
                 name: "rat"
-                food: "grasshopper"
+                food: ["wheat", "apple"]
                 predatorLevel: 1
                 collidesWith: interactiveitems.collisionCategories
             }
@@ -483,7 +483,7 @@ Window {
             Character {
                 id: snake
                 name: "snake"
-                food: ["rat","frog","wolf"]
+                food: ["rat","frog","bird"]
                 initialScale:1.5
                 predatorLevel: 3
                 collidesWith: interactiveitems.collisionCategories
