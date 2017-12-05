@@ -27,6 +27,7 @@ Window {
     property double totalPoints: 0
     property int animalLimit: 7
     property bool inGame: false
+    property double hungerRate: 0.0075
 
     onWidthChanged: {
         prevWidth=width;
@@ -1101,7 +1102,7 @@ Window {
             var items = interactiveitems.getActiveItems()
             for(var i = 0; i < items.length; i++){
                 if(items[i].life>0)
-                    items[i].life -= 0.01
+                    items[i].life -= hungerRate
             }
             publishLife()
             sandbox.points += sandbox.totalLife
@@ -1174,7 +1175,7 @@ Window {
             finished = true
             for(var i = 0; i < lifes.length; i++){
                 if(lifes[i]>0){
-                    lifes[i] -= 0.01
+                    lifes[i] -= hungerRate
                     finished = false
                     sandbox.points += lifes[i]
                 }
