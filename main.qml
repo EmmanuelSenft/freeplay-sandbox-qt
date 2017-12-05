@@ -154,8 +154,8 @@ Window {
         property double physicalCubeSize: 30 //mm
         //property double pixel2meter: (physicalMapWidth / 1000) / drawingarea.paintedWidth
         property double pixel2meter: (physicalMapWidth / 1000) / parent.width
-        property int livingAnimals: 0 //eagle.alife + wolf.alife + rat.alife + snake.alife + bird.alife + frog.alife + dragonfly.alife + fly.alife + butterfly.alife + grasshopper.alife
-        property double totalLife: eagle.life + wolf.life + rat.life + snake.life + bird.life + frog.life + dragonfly.life + fly.life + butterfly.life + grasshopper.life
+        property int livingAnimals: 0 //eagle.alife + wolf.alife + mouse.alife + snake.alife + bird.alife + frog.alife + dragonfly.alife + fly.alife + butterfly.alife + grasshopper.alife
+        property double totalLife: eagle.life + wolf.life + mouse.life + snake.life + bird.life + frog.life + dragonfly.life + fly.life + butterfly.life + grasshopper.life
         property double points: 0
         property var startingTime: 0
 
@@ -461,14 +461,14 @@ Window {
             Character {
                 id: eagle
                 name: "eagle"
-                food: ["snake","rat","frog","bird"]
+                food: ["snake","mouse","frog","bird"]
                 initialScale:1.5
                 predatorLevel: 5
                 collidesWith: interactiveitems.collisionCategories
             }
             Character {
-                id: rat
-                name: "rat"
+                id: mouse
+                name: "mouse"
                 food: ["wheat", "apple"]
                 predatorLevel: 1
                 collidesWith: interactiveitems.collisionCategories
@@ -476,7 +476,7 @@ Window {
             Character {
                 id: wolf
                 name: "wolf"
-                food: ["rat","bird"]
+                food: ["mouse","bird"]
                 initialScale:1.5
                 predatorLevel: 3
                 collidesWith: interactiveitems.collisionCategories
@@ -484,7 +484,7 @@ Window {
             Character {
                 id: snake
                 name: "snake"
-                food: ["rat","frog","bird"]
+                food: ["mouse","frog","bird"]
                 initialScale:1.5
                 predatorLevel: 3
                 collidesWith: interactiveitems.collisionCategories
@@ -502,13 +502,13 @@ Window {
             }
 
             function getActiveItems() {
-                return [eagle, wolf, rat, snake,bird,frog,dragonfly,fly,butterfly,grasshopper]
+                return [eagle, wolf, mouse, snake,bird,frog,dragonfly,fly,butterfly,grasshopper]
             }
             function getStaticItems() {
                 return [flower1, flower2, flower3, apple1, apple2, apple3, wheat1, wheat2, wheat3]
             }
             function getAllItems() {
-                return [eagle, wolf, rat, snake,bird,frog,dragonfly,fly,butterfly,grasshopper,flower1, flower2, flower3, apple1, apple2, apple3, wheat1, wheat2, wheat3]
+                return [eagle, wolf, mouse, snake,bird,frog,dragonfly,fly,butterfly,grasshopper,flower1, flower2, flower3, apple1, apple2, apple3, wheat1, wheat2, wheat3]
             }
 
             function hideItems(items) {

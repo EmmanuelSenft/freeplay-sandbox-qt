@@ -12,7 +12,7 @@
         <file>DrawingArea.qml</file>
         <file>StaticImage.qml</file>
         <file>res/wolf.png</file>
-        <file>res/rat.png</file>
+        <file>res/mouse.png</file>
         <file>res/snake.png</file>
         <file>res/lavender.png</file>
         <file>res/frog.png</file>
