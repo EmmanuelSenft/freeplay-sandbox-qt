@@ -33,7 +33,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         visible: true
         height: parent.height*.1
-        property string text: "Please, connect animals to their food."
+        property string text: "Please, connect each animal to their food \n (one animal can eat multiple things)."
         z: 0
 
         Rectangle {

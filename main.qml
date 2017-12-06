@@ -47,6 +47,11 @@ Window {
                 PropertyChanges { target: genderquestion; visible: true}
                 PropertyChanges { target: informationScreen; visible: false}
                 PropertyChanges { target: drawingarea; visible: false}
+                StateChangeScript{
+                    script: {
+                        blockingSpeech.text = "Please enter information about yourself."
+                    }
+                }
             },
             State {
                     name: "midtest"
@@ -76,7 +81,7 @@ Window {
                     name: "prepareGame"
                     PropertyChanges { target: informationScreen; visible: true}
                     PropertyChanges { target: instructionScreen; visible: false}
-                    PropertyChanges { target: informationScreen; text: "You have keep all the animals alive as long as possible! \n\n Now feed them!"}
+                    PropertyChanges { target: informationScreen; text: "You have to keep all the animals alive as long as possible! \n\n Now feed them!"}
                     StateChangeScript{
                         script: buttonStart.show()
                     }
@@ -84,7 +89,7 @@ Window {
             State {
                     name: "tutorialIntro"
                     PropertyChanges { target: informationScreen; visible: true}
-                    PropertyChanges { target: informationScreen; text: "Let's practise the game now."}
+                    PropertyChanges { target: informationScreen; text: "We can practise the game now."}
                     PropertyChanges { target: buttonStart; text: "Start"}
                     StateChangeScript{
                         script: buttonStart.show()
@@ -103,7 +108,7 @@ Window {
             State {
                     name: "end"
                     PropertyChanges { target: informationScreen; visible: "true"}
-                    PropertyChanges { target: informationScreen; text: "Thank you for having played the game!"}
+                    PropertyChanges { target: informationScreen; text: "Thank you for playing the game!"}
                     PropertyChanges { target: buttonStart; visible: "false"}
                     StateChangeScript{
                         script: interactionEventsPub.text = "stoprecord"
@@ -115,17 +120,17 @@ Window {
             switch (globalStates.state){
                 case "pretest":
                     informationScreen.visible = true
-                    informationScreen.text = "We will start by connecting the animals to their food."
+                    informationScreen.text = "Now, let's connect the animals to their food a first time."
                     buttonStart.show()
                     break
                 case "midtest":
                     console.log("in")
-                    informationScreen.text = "Let's try to connect again the animals to their food."
+                    informationScreen.text = "Let's connect the animals to their food again."
                     buttonStart.show()
                     console.log(informationScreen.text)
                     break
                 case "posttest":
-                    informationScreen.text = "Let's connect the animals to their food a last time."
+                    informationScreen.text = "Let's connect the animals to their food one last time."
                     buttonStart.show()
                     break
                 case "endGame":
@@ -728,7 +733,7 @@ Window {
         id: informationScreen
         anchors.fill: parent
         visible: true
-        property string text: "Welcome to the food chain game, \n We will start with some questions."
+        property string text: "Welcome to the food chain game. \n We will start with some questions."
         z: 10
         onTextChanged: {
             if (visible)
@@ -1218,11 +1223,11 @@ Window {
                 },
                 State {
                     name: "feedFly"
-                    PropertyChanges {target: repeatInstructions; sentence: "Press on the fly and drag it to the apple."}
+                    PropertyChanges {target: repeatInstructions; sentence: "Touch the fly and drag it to the apple."}
                 },
                 State {
                     name: "feedFrog"
-                    PropertyChanges {target: repeatInstructions; sentence: "Press on the frog and drag it to the fly."}
+                    PropertyChanges {target: repeatInstructions; sentence: "Touch the frog and drag it to the fly."}
                 },
                 State {
                     name: "deadAnimal"
