@@ -439,7 +439,7 @@ Window {
             Character {
                 id: bird
                 name: "bird"
-                food: ["dragonfly","fly","wheat","fly","grasshoper","apple"]
+                food: ["dragonfly","wheat","fly","grasshopper","apple"]
                 initialScale:.9
                 predatorLevel: 1
                 collidesWith: interactiveitems.collisionCategories

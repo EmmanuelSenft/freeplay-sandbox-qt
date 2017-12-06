@@ -205,7 +205,7 @@ Item {
     function stop() {
         events.text = "stop"
         var d = new Date()
-        var log = [globalStates.state, startingTime,d.getTime()]
+        var log = [globalStates.state+"-time", startingTime,d.getTime()]
         fileio.write(window.qlogfilename, log.join(","));
         for(var i=arrows.children.length-1;i>=0;i--){
             var log=[globalStates.state,arrows.children[i].origin.name, arrows.children[i].end.name]
