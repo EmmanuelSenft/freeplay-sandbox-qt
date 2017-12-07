@@ -71,8 +71,10 @@ Window {
                     name: "endRound"
                     StateChangeScript{
                         script: {
-                            if(robot_hand.visible)
+                            if(robot_hand.visible){
+                                releasetimer.interval = 500
                                 releasetimer.start()
+                            }
                             buttonStart.show()
                         }
                     }
@@ -308,6 +310,7 @@ Window {
                         parent.target = null;
                         externalJoint.bodyB = null;
                         robot_hand.visible=false;
+                        interval = 2000
                     }
                 }
             }
