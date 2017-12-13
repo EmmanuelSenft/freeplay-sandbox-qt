@@ -408,6 +408,10 @@ Window {
                 name: "apple-3"
             }
             StaticImage{
+                id: apple4
+                name: "apple-4"
+            }
+            StaticImage{
                 id: wheat1
                 name: "wheat-1"
                 scale:1.5
@@ -420,6 +424,11 @@ Window {
             StaticImage{
                 id: wheat3
                 name: "wheat-3"
+                scale:1.5
+            }
+            StaticImage{
+                id: wheat4
+                name: "wheat-4"
                 scale:1.5
             }
 
@@ -513,10 +522,10 @@ Window {
                 return [eagle, wolf, mouse, snake,bird,frog,dragonfly,fly,butterfly,grasshopper]
             }
             function getStaticItems() {
-                return [flower1, flower2, flower3, apple1, apple2, apple3, wheat1, wheat2, wheat3]
+                return [flower1, flower2, flower3, apple1, apple2, apple3, apple4, wheat1, wheat2, wheat3, wheat4]
             }
             function getAllItems() {
-                return [eagle, wolf, mouse, snake,bird,frog,dragonfly,fly,butterfly,grasshopper,flower1, flower2, flower3, apple1, apple2, apple3, wheat1, wheat2, wheat3]
+                return [eagle, wolf, mouse, snake,bird,frog,dragonfly,fly,butterfly,grasshopper,flower1, flower2, flower3, apple1, apple2, apple3, apple4, wheat1, wheat2, wheat3, wheat4]
             }
 
             function hideItems(items) {
