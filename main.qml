@@ -1401,6 +1401,11 @@ Window {
             interactionEventsPub.text = "animaleats_"+name
     }
 
+    function failInteraction(name){
+        if(globalStates.state === "game")
+            interactionEventsPub.text = "failinteraction_"+name
+    }
+
     RosStringPublisher {
         id: blockingSpeech
         topic: "nao/blocking_speech"
