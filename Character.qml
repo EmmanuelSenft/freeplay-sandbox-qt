@@ -20,6 +20,7 @@ InteractiveItem {
     property bool isMoved: false
     property double targetLife: 0
     property bool movable: true
+    property bool fleeing: fleeAnim.running
     property int predatorLevel: 0
     visible: false
     x: -100
@@ -30,7 +31,7 @@ InteractiveItem {
     rotation: 0
 
     onRotationChanged: rotation = 0
-    onXChanged: if(isMoved) testCloseImages()
+    onXChanged: if(isMoved && !fleeing) testCloseImages()
 
     property double bbRadius: bbScale * character.width/2
     property point bbOrigin: Qt.point(character.width/2, character.height/2)
@@ -58,7 +59,7 @@ InteractiveItem {
             }
 
     ParallelAnimation{
-        id:flee
+        id:fleeAnim
         NumberAnimation {target: character; property: "x"; from: x; to: x+fleeX; duration: 500; easing.type: Easing.OutInBounce}
         NumberAnimation {target: character; property: "y";from: y; to: y+fleeY; duration: 500; easing.type: Easing.InOutBounce}
     }
@@ -83,26 +84,28 @@ InteractiveItem {
             return
         var list = interactiveitems.getActiveItems()
         for(var i=0 ; i < list.length; i++){
-            if(list[i].visible && list[i].life > 0 && testProximity(list[i])){
+            if(list[i].visible && !list[i].fleeing && list[i].life > 0 && testProximity(list[i])){
                 if(food.indexOf(list[i].name)>-1){
-                    list[i].fleeing()
+                    list[i].flee()
                     if(!eating && list[i].life>0){// && life < .95*initialLife){
                         list[i].changeLife(-.25)
                         changeLife(0.3)
                     }
                 }
                 else if(list[i].food.indexOf(name)>-1){
-                    fleeing()
+                    flee()
                     if (!list[i].eating && life>0){// && list[i].life < .95*list[i].initialLife){
                         changeLife(-.25)
                         list[i].changeLife(.3)
                     }
                 }
                 else if (list[i].predatorLevel <= predatorLevel){
-                    list[i].fleeing()
+                    failInteraction(name)
+                    list[i].flee()
                 }
                 else{
-                    fleeing()
+                    flee()
+                    failInteraction(name)
                 }
             }
         }
@@ -203,7 +206,7 @@ InteractiveItem {
             return false
     }
 
-    function fleeing(){
+    function flee(){
         var angle = 0
         var distance = 0
         var good = false
@@ -231,7 +234,7 @@ InteractiveItem {
             }
         }
 
-        flee.start()
+        fleeAnim.start()
     }
 
     function changeLife(value){
