@@ -113,6 +113,101 @@ Item {
         anchors.fill:parent
     }
 
+    Item {
+        id: informationScreen
+        anchors.fill: parent
+        visible: false
+        property string text: "Are you sure that all the animals are connected to their food some animals eat many things."
+        z: 10
+        onVisibleChanged: {
+            if (visible)
+                blockingSpeech.text = text
+        }
+
+        Rectangle {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            width: parent.width / 1.5
+            height: parent.height / 1.5
+            color: "AliceBlue"
+            border.color: "black"
+            border.width: width/100
+            radius: width / 10
+            Label {
+                id: informationText
+                width: parent.width*.9
+                font.pixelSize: 50
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                horizontalAlignment: Text.AlignHCenter
+                text: informationScreen.text
+                wrapMode: Text.WordWrap
+            }
+            Button {
+                id: buttonReturn
+                width: parent.width/3
+                height: parent.height/5
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.horizontalCenterOffset: -parent.height/3
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: parent.height/3
+                text: "Maybe I can connect more animals"
+                visible: true
+                style: ButtonStyle {
+                    background: Rectangle {
+                                border.width: width/40
+                                border.color: "black"
+                                radius: 2*border.width
+                                color: "orange"
+                            }
+                    label: Text {
+                        font.family: "Helvetica"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        wrapMode: Text.WordWrap
+                        font.pointSize: 30
+                        text: buttonReturn.text
+                    }
+                }
+                onClicked: {
+                    informationScreen.visible=false
+                }
+
+            }
+            Button {
+                id: buttonStart
+                width: parent.width/3
+                height: parent.height/5
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.horizontalCenterOffset: parent.height/3
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: parent.height/3
+                text: "I connected all I know"
+                visible: true
+                style: ButtonStyle {
+                    background: Rectangle {
+                                border.width: width/40
+                                border.color: "black"
+                                radius: 2*border.width
+                                color: "green"
+                            }
+                    label: Text {
+                        font.family: "Helvetica"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        wrapMode: Text.WordWrap
+                        font.pointSize: 30
+                        text: buttonStart.text
+                    }
+                }
+                onClicked: {
+                    stop()
+                }
+            }
+        }
+    }
+
+
     Rectangle{
         id: continueButton
         anchors.right: parent.right
@@ -125,7 +220,7 @@ Item {
         color: "green"
         border.color: "black"
         border.width: width / 10
-        visible: false
+        visible: true
         Label{
             anchors.fill: parent
             horizontalAlignment: Label.AlignHCenter
@@ -137,21 +232,28 @@ Item {
         MouseArea{
             anchors.fill: parent
             onClicked: {
-                stop()
+                if(testReady()){
+                    informationScreen.text = "Are you sure that all the animals are connected to their food? Some animals eat many things."
+                }
+                else{
+                    informationScreen.text = "Some animals don't have food, are you sure you want to continue?"
+                }
+                informationScreen.visible = true
             }
         }
     }
+
+
 
     function testReady(){
         for(var i=images.children.length-1;i>=0;i--){
             if(targets.indexOf(images.children[i].name)>=0)
                 continue
             if(images.children[i].arrows === 0){
-                continueButton.visible = false
-                return
+                return false
             }
         }
-        continueButton.visible = true
+        return true
     }
 
     function prepare() {
