@@ -55,13 +55,9 @@ Window {
             },
             State {
                     name: "midtest"
-                    PropertyChanges { target: informationScreen; visible: true}
-                    PropertyChanges { target: informationScreen; text: "Let's try to connect again the animals to their food."}
             },
             State {
                     name: "posttest"
-                    PropertyChanges { target: informationScreen; visible: true}
-                    PropertyChanges { target: informationScreen; text: "Let's connect the animals to their food a last time."}
             },
             State {
                     name: "game"
@@ -75,6 +71,15 @@ Window {
                                 releasetimer.interval = 500
                                 releasetimer.start()
                             }
+                        }
+                    }
+            },
+            State {
+                    name: "intro"
+                    StateChangeScript{
+                        script: {
+                            informationScreen.visible = true
+                            informationScreen.text = "Today we will practice and learn about food chains, discovering what animals eat."
                             buttonStart.show()
                         }
                     }
@@ -91,7 +96,7 @@ Window {
             State {
                     name: "tutorialIntro"
                     PropertyChanges { target: informationScreen; visible: true}
-                    PropertyChanges { target: informationScreen; text: "We can practise the game now."}
+                    PropertyChanges { target: informationScreen; text: "Let's practise the game now."}
                     PropertyChanges { target: buttonStart; text: "Start"}
                     StateChangeScript{
                         script: buttonStart.show()
@@ -122,7 +127,7 @@ Window {
             switch (globalStates.state){
                 case "pretest":
                     informationScreen.visible = true
-                    informationScreen.text = "Now, let's connect the animals to their food a first time."
+                    informationScreen.text = "Animals will appear, could you tell me what their food is."
                     buttonStart.show()
                     break
                 case "midtest":
@@ -805,6 +810,9 @@ Window {
                     //    tutorial.practice()
                     //else
                     switch (globalStates.state){
+                    case "intro":
+                        globalStates.state = "pretest"
+                        break
                     case "pretest":
                         informationScreen.visible = false
                         graph.start()
@@ -837,10 +845,12 @@ Window {
                                 globalStates.state = "endGame"
                                 interactionEventsPub.text = "endGame"
                                 informationScreen.visible = true
-                                informationScreen.text = "This is the end of the game. \nYou achieved a total " + Math.round(totalPoints) +" points. \nWell done!"
+                                informationScreen.text = "This is the end of the game. \nYou achieved a total " + Math.round(totalPoints) +" points. \nIt's impressive!"
                             }
-                            else
+                            else{
+                                blockingSpeech.text = "Let's try again!"
                                 startFoodChain()
+                            }
                         }
                         break
                     case "end":
@@ -1024,7 +1034,7 @@ Window {
                     onClicked:{
                         var log=["demo",genderquestion.gender(),age.value]
                         fileio.write(window.qlogfilename, log.join(","));
-                        globalStates.state = "pretest"
+                        globalStates.state = "intro"
                     }
             }
     }
@@ -1203,15 +1213,29 @@ Window {
         globalStates.state = "endRound"
         interactionEventsPub.text = "endround"
         informationScreen.visible = true
-        informationScreen.text="Three animals died, so the game stops. \n You finished with " + Math.round(sandbox.points) +" points. \n Well done!"
-        if(rounds == maxRounds)
-            buttonStart.text="Continue"
+        informationScreen.text="Three animals ran out of energy, so the game stops."
+        buttonStart.text="Continue"
         interactiveitems.hideItems(interactiveitems.getStaticItems())
         interactiveitems.hideItems(interactiveitems.getActiveItems())
         var d = new Date()
         var n = d.getTime() - sandbox.startingTime
         var log=["Round"+rounds,n,sandbox.points]
         fileio.write(window.qlogfilename, log.join(","));
+        timerScore.start()
+    }
+
+    Timer{
+        id: timerScore
+        interval: 5000
+        onTriggered: {
+            var congratulation=["Excellent", "Good job", "Well played", "Bravo"]
+            informationScreen.text="You finished with " + Math.round(sandbox.points) +" points. \n "+congratulation[rounds%4]+"!"
+            if(rounds == maxRounds || maxRounds == 2*rounds)
+                buttonStart.text="Continue"
+            else
+                buttonStart.text="Try again"
+            buttonStart.show()
+        }
     }
 
     Item{
@@ -1283,11 +1307,11 @@ Window {
                         fly.movable = true
                         break
                     case "deadAnimal":
-                        tutorial.sentence = "One animal died, let's try again."
+                        tutorial.sentence = "One animal ran out of energy, let's try again."
                         hunger.running = false
                         break
                     case "endTuto":
-                        tutorial.sentence = "Excellent! But becareful, when an animal has no energy, it dies. Let's start the game when you are ready."
+                        tutorial.sentence = "Excellent! But be careful, when an animal has no energy, it disappears. Let's start the game when you are ready."
                         endTutoButton.show()
                         break
                 }

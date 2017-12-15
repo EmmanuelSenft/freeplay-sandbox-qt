@@ -33,7 +33,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         visible: true
         height: parent.height*.1
-        property string text: "Please, connect each animal to their food \n (one animal can eat multiple things)."
+        property string text: "Please, connect each animal to their food \n (Keep in mind that one animal can eat multiple things)."
         z: 0
 
         Rectangle {
@@ -195,6 +195,8 @@ Item {
     function start() {
         if(ready == false)
             prepare()
+        else
+            instructionScreen.text = "Please, connect each animal to their food \n (Remember one animal can eat multiple things)"
         blockingSpeech.text = instructionScreen.text
         graph.visible = true
         var d = new Date()
