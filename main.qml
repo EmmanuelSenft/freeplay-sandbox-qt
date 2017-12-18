@@ -291,6 +291,10 @@ Window {
                             externalJoint.target = Qt.point(x,y);
                             externalJoint.bodyB = target;
                         }
+                        else{
+                            interactionEventsPub.text = "robottouch_none"
+                            releasetimer.restart();
+                        }
                     }
                     if (target != null) {
                         externalJoint.target = Qt.point(x, y);
