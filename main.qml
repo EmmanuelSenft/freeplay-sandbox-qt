@@ -282,7 +282,13 @@ Window {
                     if (target === null) {
                         var obj = interactiveitems.childAt(x, y);
                         if (obj.objectName === "interactive") {
+                            if (obj.isMoved){
+                                interactionEventsPub.text = "robottouch_none"
+                                releasetimer.restart();
+                                return
+                            }
                             draggedObject = obj.name;
+
                             //console.log("ROS controller touched object: " + obj.name);
                             interactionEventsPub.text = "robottouch_" + draggedObject;
 
