@@ -113,12 +113,14 @@ Item {
         anchors.fill:parent
     }
 
-    Item {
+    Rectangle {
         id: informationScreen
         anchors.fill: parent
         visible: false
         property string text: "Are you sure that all the animals are connected to their food some animals eat many things."
         z: 10
+        color: "grey"
+        opacity: .9
         onVisibleChanged: {
             if (visible)
                 blockingSpeech.text = text
@@ -139,6 +141,7 @@ Item {
                 font.pixelSize: 50
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -parent.height/8
                 horizontalAlignment: Text.AlignHCenter
                 text: informationScreen.text
                 wrapMode: Text.WordWrap
@@ -150,8 +153,8 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.horizontalCenterOffset: -parent.height/3
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: parent.height/3
-                text: "Maybe I can connect more animals"
+                anchors.verticalCenterOffset: parent.height/4
+                text: "Keep connecting"
                 visible: true
                 style: ButtonStyle {
                     background: Rectangle {
@@ -181,7 +184,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.horizontalCenterOffset: parent.height/3
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: parent.height/3
+                anchors.verticalCenterOffset: parent.height/4
                 text: "I connected all I know"
                 visible: true
                 style: ButtonStyle {
