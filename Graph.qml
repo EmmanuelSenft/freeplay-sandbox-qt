@@ -207,6 +207,21 @@ Item {
                     stop()
                 }
             }
+            onVisibleChanged: {
+                if(visible){
+                    buttonStart.visible = false
+                    buttonReturn.visible = false
+                    showButtonTimer.start()
+                }
+            }
+            Timer{
+                id:showButtonTimer
+                interval: 2000
+                onTriggered: {
+                    buttonStart.visible = true
+                    buttonReturn.visible = true
+                }
+            }
         }
     }
 
@@ -214,9 +229,9 @@ Item {
     Rectangle{
         id: continueButton
         anchors.right: parent.right
-        anchors.rightMargin: parent.width/20
+        anchors.rightMargin: parent.width/40
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: parent.width/20
+        anchors.bottomMargin: parent.width/40
         width: parent.width/15
         height: width
         radius: width/2
@@ -301,8 +316,8 @@ Item {
         if(ready == false)
             prepare()
         else
-            instructionScreen.text = "Please, connect each animal to their food \n (Remember one animal can eat multiple things)"
-        blockingSpeech.text = instructionScreen.text
+            instructionScreen.text = "Please, connect each animal to their food. \n (Remember one animal can eat multiple things)"
+        //blockingSpeech.text = instructionScreen.text
         graph.visible = true
         var d = new Date()
         startingTime = d.getTime()
@@ -322,6 +337,7 @@ Item {
         }
         globalStates.state = nextState
         graph.visible = false
+        informationScreen.visible = false
     }
 
 
