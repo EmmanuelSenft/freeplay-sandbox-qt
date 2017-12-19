@@ -310,8 +310,9 @@ Window {
 
                 Timer {
                     id: releasetimer
-                    interval: 1000
+                    interval: initInteraval
                     running: false
+                    property double initInteraval: 1000
                     onTriggered: {
                         //console.log("Auto-releasing ROS contact with " + parent.draggedObject);
                         interactionEventsPub.text = "robotrelease_" + parent.draggedObject;
@@ -325,7 +326,7 @@ Window {
                         parent.target = null;
                         externalJoint.bodyB = null;
                         robot_hand.visible=false;
-                        interval = 2000
+                        interval = initInteraval
                     }
                 }
             }
