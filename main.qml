@@ -1372,10 +1372,14 @@ Window {
             apple1.visible = true
             apple1.x = 3*sandbox.width/4
             apple1.y = sandbox.height/2
+            apple1.initiate()
         }
 
         function sentenceIn(str) {
+            console.log("Received "+str)
+            console.log("Expected:"+sentence)
             if(str === tutorial.sentence){
+                console.log("Success")
                 defaultSay.stop()
                 switch (tutoStates.state){
                     case "intro":
