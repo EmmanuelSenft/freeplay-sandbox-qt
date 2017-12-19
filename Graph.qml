@@ -313,6 +313,7 @@ Item {
     }
 
     function start() {
+        naoInstructions.text = "look_forward"
         if(ready == false)
             prepare()
         else

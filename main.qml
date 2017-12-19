@@ -1471,6 +1471,7 @@ Window {
     }
 
     function start(){
+        naoInstructions.text = "look_forward"
         interactionEventsPub.text = "record"
         initTimer.start()
         var d = new Date()
@@ -1480,5 +1481,10 @@ Window {
         //tutoStates.state = "intro"
         //globalStates.state = "demoQuestion"
         startFoodChain()
+    }
+
+    RosStringPublisher {
+        id: naoInstructions
+        topic: "nao/events"
     }
 }
