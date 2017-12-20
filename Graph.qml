@@ -117,13 +117,16 @@ Item {
         id: informationScreen
         anchors.fill: parent
         visible: false
-        property string text: "Are you sure that all the animals are connected to their food some animals eat many things."
+        property string text: "Are you sure that all the animals are connected to theirfood?"
         z: 10
         color: "grey"
         opacity: .9
         onVisibleChanged: {
             if (visible)
                 blockingSpeech.text = text
+        }
+        MouseArea{
+            anchors.fill: parent
         }
 
         Rectangle {
@@ -173,6 +176,7 @@ Item {
                     }
                 }
                 onClicked: {
+                    events.text = "keep_connect"
                     informationScreen.visible=false
                 }
 
@@ -250,11 +254,21 @@ Item {
         MouseArea{
             anchors.fill: parent
             onClicked: {
+                events.text = "continue"
                 if(testReady()){
-                    informationScreen.text = "Are you sure that all the animals are connected to their food? Some animals eat many things."
+                    if(arrows.children.length>imageNames.length-targets.length+1){
+                        events.text = "good"
+                        informationScreen.text = "Are you sure that all the animals are connected to their food?"
+                    }
+                    else{
+                        informationScreen.text = "Are you sure that all the animals are connected to their food? Some animals eat many things."
+                        events.text = "low_arrow"
+
+                    }
                 }
                 else{
                     informationScreen.text = "Some animals don't have food, are you sure you want to continue?"
+                    events.text = "no_food"
                 }
                 informationScreen.visible = true
             }
