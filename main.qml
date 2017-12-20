@@ -42,6 +42,16 @@ Window {
         id: globalStates
         states: [
             State {
+                    name: "restart"
+                    StateChangeScript{
+                        script: {
+                            informationScreen.visible = true
+                            informationScreen.text = "Welcome to the food chain game. \n We will start with some questions."
+                            buttonStart.visible = true
+                        }
+                    }
+            },
+            State {
                 name: "demoQuestion"
                 PropertyChanges { target: questions; visible: true}
                 PropertyChanges { target: genderquestion; visible: true}
@@ -114,11 +124,13 @@ Window {
             },
             State {
                     name: "end"
-                    PropertyChanges { target: informationScreen; visible: "true"}
-                    PropertyChanges { target: informationScreen; text: "Thank you for playing the game!"}
-                    PropertyChanges { target: buttonStart; visible: "false"}
                     StateChangeScript{
-                        script: interactionEventsPub.text = "stoprecord"
+                        script: {
+                            interactionEventsPub.text = "stoprecord"
+                            informationScreen.visible = true
+                            informationScreen.text = "Thank you for playing the game!"
+                            buttonStart = visible = "false"
+                        }
                     }
             }
 
@@ -870,6 +882,9 @@ Window {
                     case "":
                         start()
                         break
+                    case "restart":
+                        start()
+                        break
                     default:startFoodChain()
                     }
 
@@ -1098,10 +1113,8 @@ Window {
         onClicked: {
             clicks += 1;
             if (clicks === 3) {
-                localising.signal();
-                fiducialmarker.visible = true;
                 clicks = 0;
-                //endRound()
+                resetGame()
             }
         }
     }
@@ -1486,5 +1499,11 @@ Window {
     RosStringPublisher {
         id: naoInstructions
         topic: "nao/events"
+    }
+    function resetGame(){
+        globalStates.state="restart"
+        rounds = 0
+        totalPoints = 0
+        console.log("reset")
     }
 }
