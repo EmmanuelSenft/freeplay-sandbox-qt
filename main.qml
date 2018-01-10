@@ -1494,8 +1494,8 @@ Window {
 
         //globalStates.state = "pretest"
         //tutoStates.state = "intro"
-        //globalStates.state = "demoQuestion"
-        startFoodChain()
+        globalStates.state = "demoQuestion"
+        //startFoodChain()
     }
 
     RosStringPublisher {
