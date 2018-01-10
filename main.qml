@@ -997,7 +997,7 @@ Window {
                     property int age: age.value
 
                     function reset(){
-                            age.value = 5;
+                            age.value = 7;
                     }
 
                     Text {
@@ -1014,10 +1014,10 @@ Window {
                                     id: age
                                     width: 1000
                                     tickmarksEnabled: false
-                                    minimumValue: 6
-                                    value: 8
+                                    minimumValue: 7
+                                    value: 7
                                     stepSize: 1
-                                    maximumValue: 10
+                                    maximumValue: 12
                                     style: SliderStyle {
                                             handle: Rectangle {
                                                     width: 60
@@ -1028,7 +1028,7 @@ Window {
                                             groove: Rectangle {
                                                     color: "#777"
                                                     width: parent.width
-                                                    height:10
+                                                    height:20
                                                     radius: height/2
                                             }
                                     }
@@ -1061,6 +1061,8 @@ Window {
                         var log=["demo",genderquestion.gender(),age.value]
                         fileio.write(window.qlogfilename, log.join(","));
                         globalStates.state = "intro"
+                        genderquestion.reset()
+                        agequestion.reset()
                     }
             }
     }
