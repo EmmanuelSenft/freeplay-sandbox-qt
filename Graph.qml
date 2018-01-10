@@ -117,7 +117,7 @@ Item {
         id: informationScreen
         anchors.fill: parent
         visible: false
-        property string text: "Are you sure that all the animals are connected to theirfood?"
+        property string text: "Are you sure that all the animals are connected to their food?"
         z: 10
         color: "grey"
         opacity: .9

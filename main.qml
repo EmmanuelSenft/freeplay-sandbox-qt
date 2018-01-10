@@ -868,7 +868,7 @@ Window {
                                 globalStates.state = "endGame"
                                 interactionEventsPub.text = "endGame"
                                 informationScreen.visible = true
-                                informationScreen.text = "This is the end of the game. \nYou achieved a total " + Math.round(totalPoints) +" points. \nIt's impressive!"
+                                informationScreen.text = "This is the end of the game. \nYou achieved a total of " + Math.round(totalPoints) +" points. \nIt's impressive!"
                             }
                             else{
                                 blockingSpeech.text = "Let's try again!"
