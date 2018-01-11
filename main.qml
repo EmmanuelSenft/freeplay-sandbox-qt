@@ -28,6 +28,8 @@ Window {
     property int animalLimit: 7
     property bool inGame: false
     property double hungerRate: 0.0075
+    property string sparcMode: "sparc"
+    property string autonomous: "normal"
 
     onWidthChanged: {
         prevWidth=width;
@@ -41,6 +43,16 @@ Window {
     StateGroup {
         id: globalStates
         states: [
+            State {
+                    name: "condition"
+                    StateChangeScript{
+                        script: {
+                            informationScreen.visible = true
+                            informationScreen.text = "Current condition: " + sparcMode +" "+autonomous
+                            buttonStart.visible = true
+                        }
+                    }
+            },
             State {
                     name: "restart"
                     StateChangeScript{
@@ -882,6 +894,9 @@ Window {
                     case "":
                         start()
                         break
+                    case "condition":
+                        globalStates.state="restart"
+                        break
                     case "restart":
                         start()
                         break
@@ -1116,6 +1131,8 @@ Window {
             clicks += 1;
             if (clicks === 3) {
                 clicks = 0;
+                sparcMode = "sparc"
+                autonomous = "normal"
                 resetGame()
             }
         }
@@ -1131,20 +1148,29 @@ Window {
         onClicked: {
             clicks += 1;
             if (clicks === 3) {
-                //debugToolbar.visible=true;
-                globalStates.state = "question1"
-                clicks = 0;
-                //timerHideDebug.start();
+                sparcMode = "nosparc"
+                autonomous = "normal"
+                resetGame()
+                clicks = 0
             }
         }
+    }
 
-        Timer {
-            id: timerHideDebug
-            interval: 5000; running: false; repeat: false
-            onTriggered: {
-                debugToolbar.visible = false;
+    MouseArea {
+        width:30
+        height:width
+        z: 100
+        anchors.top: parent.top
+        anchors.left: parent.left
+        property int clicks: 0
+        onClicked: {
+            clicks += 1;
+            if (clicks === 3) {
+                sparcMode = "sparc"
+                autonomous = "autonomous"
+                resetGame()
+                clicks = 0
             }
-
         }
     }
 
@@ -1487,10 +1513,10 @@ Window {
 
     function start(){
         naoInstructions.text = "look_forward"
-        interactionEventsPub.text = "record"
+        interactionEventsPub.text = "record_"+sparcMode+"_"+autonomous
         initTimer.start()
         var d = new Date()
-        qlogfilename = "foodchain-data/logs/" + d.toISOString().split(".")[0] + ".csv"
+        qlogfilename = "foodchain-data/condition-"+sparcMode+"-"+autonomous+"/logs/" + d.toISOString().split(".")[0] + ".csv"
 
         //globalStates.state = "pretest"
         //tutoStates.state = "intro"
@@ -1503,7 +1529,8 @@ Window {
         topic: "nao/events"
     }
     function resetGame(){
-        globalStates.state="restart"
+        globalStates.state="condition"
+        informationScreen.text = "Current condition: " + sparcMode +" "+autonomous
         rounds = 0
         totalPoints = 0
         console.log("reset")
