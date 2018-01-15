@@ -228,7 +228,7 @@ InteractiveItem {
 
     function testProximity(item){
         var dist = Math.pow(x-item.x,2)+Math.pow(y-item.y,2)
-        if(dist<10000 * Math.pow(Math.max(item.scale,scale),2) && item.name !== name)
+        if(dist<12000 * Math.pow(Math.max(item.scale,scale),2) && item.name !== name)
             return true
         else
             return false
@@ -288,6 +288,18 @@ InteractiveItem {
         alive = true
         life = initialLife
         scale = initialScale
+
+    }
+
+
+    function release(){
+        releaseTimer.start()
+    }
+
+    Timer{
+        id: releaseTimer
+        interval: 500
+        onTriggered: isMoved = false
     }
 
     onEatingChanged:{

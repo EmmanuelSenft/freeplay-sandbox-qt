@@ -62,7 +62,7 @@ TouchPoint {
                 interactionEventsPub.text = "childrelease_"+obj.name
                 joint.bodyB = null;
                 movingItem = false;
-                itemMoved.isMoved = false
+                itemMoved.release()
                 //itemMoved.checkProximity()
             }
         }
