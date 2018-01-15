@@ -1481,18 +1481,18 @@ Window {
             interactionEventsPub.text = "targetdead_"+name
     }
 
-    function animalEating(name){
-        if(tutoStates.state === "feedFly" && name === "fly")
+    function animalEating(name1, name2){
+        if(tutoStates.state === "feedFly" && name1 === "fly")
             tutoStates.state = "feedFrog"
-        if(tutoStates.state === "feedFrog" && name === "frog")
+        if(tutoStates.state === "feedFrog" && name1 === "frog")
             tutoStates.state = "endTuto"
         if(globalStates.state === "game")
-            interactionEventsPub.text = "animaleats_"+name
+            interactionEventsPub.text = "animaleats_"+name1+"_"+name2
     }
 
-    function failInteraction(name){
+    function failInteraction(name1, name2){
         if(globalStates.state === "game")
-            interactionEventsPub.text = "failinteraction_"+name
+            interactionEventsPub.text = "failinteraction_"+name1+"_"+name2
     }
 
     RosStringPublisher {

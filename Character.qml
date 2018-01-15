@@ -22,6 +22,7 @@ InteractiveItem {
     property bool movable: true
     property bool fleeing: fleeAnim.running
     property int predatorLevel: 0
+    property string target: ""
     visible: false
     x: -100
     y: -100
@@ -103,6 +104,7 @@ InteractiveItem {
                     list[i].flee()
                     if(!eating && list[i].life>0){// && life < .95*initialLife){
                         list[i].changeLife(-.25)
+                        target = list[i].name
                         changeLife(0.3)
                     }
                 }
@@ -110,17 +112,18 @@ InteractiveItem {
                     flee()
                     if (!list[i].eating && life>0){// && list[i].life < .95*list[i].initialLife){
                         changeLife(-.25)
+                        list[i].target = name
                         list[i].changeLife(.3)
                     }
                 }
                 else if (list[i].predatorLevel <= predatorLevel){
-                    failInteraction(name)
+                    failInteraction(name, list[i].name)
                     list[i].flee()
                     playBurk.run()
                 }
                 else{
                     flee()
-                    failInteraction(name)
+                    failInteraction(name, list[i].name)
                     playBurk.run()
                 }
             }
@@ -131,6 +134,7 @@ InteractiveItem {
             if(testProximity(list[i]) && !eating && list[i].life>0){// && life < .95*initialLife){
                 if(food.indexOf(list[i].type)>-1){
                     list[i].changeLife(-.25)
+                    target = list[i].name
                     changeLife(0.3)
                 }
                 else{
@@ -291,7 +295,7 @@ InteractiveItem {
             var i = Math.floor(Math.random() * 10) + 1
             playCrunch.source = "/res/crunch"+i+".mp3"
             playCrunch.play()
-            animalEating(name)
+            animalEating(name,target)
         }
     }
  }
