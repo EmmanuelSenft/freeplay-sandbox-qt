@@ -78,6 +78,20 @@ InteractiveItem {
         id: playCrunch
         source: "res/crunch.mp3"
     }
+    Audio {
+        id: playBurk
+        property bool isPlaying: false
+        source: "res/burk.mp3"
+        onPlaying: isPlaying = true
+        onStopped: isPlaying = false
+        volume: .4
+        function run(){
+            var i = Math.floor(Math.random() * 5) + 3
+            source = "/res/burk"+i+".mp3"
+            play()
+
+        }
+    }
 
     function testCloseImages(){
         if(!visible || !alive)
@@ -102,19 +116,29 @@ InteractiveItem {
                 else if (list[i].predatorLevel <= predatorLevel){
                     failInteraction(name)
                     list[i].flee()
+                    playBurk.run()
                 }
                 else{
                     flee()
                     failInteraction(name)
+                    playBurk.run()
                 }
             }
         }
 
         list = interactiveitems.getStaticItems()
         for(var i=0 ; i < list.length; i++){
-            if(testProximity(list[i]) && food.indexOf(list[i].type)>-1 && !eating && list[i].life>0){// && life < .95*initialLife){
-                list[i].changeLife(-.25)
-                changeLife(0.3)
+            if(testProximity(list[i]) && !eating && list[i].life>0){// && life < .95*initialLife){
+                if(food.indexOf(list[i].type)>-1){
+                    list[i].changeLife(-.25)
+                    changeLife(0.3)
+                }
+                else{
+                    if(!playBurk.isPlaying){
+                        failInteraction(name, list[i].name)
+                        playBurk.run()
+                    }
+                }
             }
         }
 

@@ -43,5 +43,13 @@
         <file>res/wheat.png</file>
         <file>res/mouth.png</file>
         <file>ImageGraph.qml</file>
+        <file>res/burk6.mp3</file>
+        <file>res/burk8.mp3</file>
+        <file>res/burk7.mp3</file>
+        <file>res/burk5.mp3</file>
+        <file>res/burk4.mp3</file>
+        <file>res/burk3.mp3</file>
+        <file>res/burk2.mp3</file>
+        <file>res/burk1.mp3</file>
     </qresource>
 </RCC>
