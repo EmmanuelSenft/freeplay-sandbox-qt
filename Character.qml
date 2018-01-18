@@ -75,23 +75,55 @@ InteractiveItem {
         enabled:false
     }
 
-
     Audio {
-        id: playCrunch
-        source: "res/crunch.mp3"
-    }
-    Audio {
-        id: playBurk
+        id: soundPlayer
         property bool isPlaying: false
-        source: "res/burk.mp3"
-        onPlaying: isPlaying = true
-        onStopped: isPlaying = false
-        volume: .4
-        function run(){
-            var i = Math.floor(Math.random() * 5) + 3
-            source = "/res/burk"+i+".mp3"
+        property var startTime: 0
+        property int yuckMax: 10
+        property int yumMax: 8
+        property int fleeMax: 7
+        property int eatenMax: 7
+        source: "res/yuck1.mp3"
+        onPlaying: {
+            startTime = new Date()
+            isPlaying = true
+        }
+        onStopped: {
+            var stopTime = new Date()
+            var diff =stopTime.getTime()-startTime.getTime()
+            isPlaying = false
+            if(diff<200){
+                play()
+                console.log("Replay")
+            }
+        }
+        function runYuck(){
+            var i = Math.floor(Math.random() * yuckMax) + 1
+            if (i>yuckMax)
+                i=yuckMax
+            source = "/res/yuck"+i+".mp3"
             play()
-
+        }
+        function runYum(){
+            var i = Math.floor(Math.random() * yumMax) + 1
+            if (i>yumMax)
+                i=yumMax
+            source = "/res/yummy"+i+".mp3"
+            play()
+        }
+        function runFlee(){
+            var i = Math.floor(Math.random() * fleeMax) + 1
+            if (i>fleeMax)
+                i=fleeMax
+            source = "/res/flee"+i+".mp3"
+            play()
+        }
+        function runEaten(){
+            var i = Math.floor(Math.random() * eatenMax) + 1
+            if (i>eatenMax)
+                i=eatenMax
+            source = "/res/eaten"+i+".mp3"
+            play()
         }
     }
 
@@ -107,10 +139,12 @@ InteractiveItem {
                         list[i].changeLife(-.25)
                         target = list[i].name
                         changeLife(0.3)
+                        soundPlayer.runYum()
                     }
                 }
                 else if(list[i].food.indexOf(name)>-1){
                     flee()
+                    soundPlayer.runEaten()
                     if (!list[i].eating && life>0){// && list[i].life < .95*list[i].initialLife){
                         changeLife(-.25)
                         list[i].target = name
@@ -120,12 +154,12 @@ InteractiveItem {
                 else if (list[i].predatorLevel <= predatorLevel){
                     failInteraction(name, list[i].name)
                     list[i].flee()
-                    playBurk.run()
+                    soundPlayer.runYuck()
                 }
                 else{
                     flee()
                     failInteraction(name, list[i].name)
-                    playBurk.run()
+                    soundPlayer.runFlee()
                 }
             }
         }
@@ -137,11 +171,12 @@ InteractiveItem {
                     list[i].changeLife(-.25)
                     target = list[i].name
                     changeLife(0.3)
+                    soundPlayer.runYum()
                 }
                 else{
-                    if(!playBurk.isPlaying){
+                    if(!soundPlayer.isPlaying){
                         failInteraction(name, list[i].name)
-                        playBurk.run()
+                        soundPlayer.runYuck()
                     }
                 }
             }
@@ -310,9 +345,6 @@ InteractiveItem {
 
     onEatingChanged:{
         if (eating){
-            var i = Math.floor(Math.random() * 10) + 1
-            playCrunch.source = "/res/crunch"+i+".mp3"
-            playCrunch.play()
             animalEating(name,target)
         }
     }
