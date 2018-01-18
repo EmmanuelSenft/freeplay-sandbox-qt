@@ -412,7 +412,7 @@ Item {
 
     Timer{
         id: timerStar
-        interval: 1500
+        interval: 2500
         onTriggered: {
             var perf = getPerf()
             informationScreen.text = "You got "+perf+" stars."
