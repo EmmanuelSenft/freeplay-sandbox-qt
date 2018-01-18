@@ -297,6 +297,11 @@ InteractiveItem {
         releaseTimer.start()
     }
 
+    function touched(){
+        isMoved = true
+        releaseTimer.stop()
+    }
+
     Timer{
         id: releaseTimer
         interval: 500

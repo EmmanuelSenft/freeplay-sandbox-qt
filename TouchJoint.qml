@@ -50,7 +50,7 @@ TouchPoint {
                 interactionEventsPub.text = "childtouch_"+obj.name
                 movingItem = true;
                 itemMoved = obj;
-                itemMoved.isMoved = true
+                itemMoved.touched()
                 joint.maxForce = obj.body.getMass() * 500;
                 joint.target = Qt.point(x, y);
                 joint.bodyB = obj.body;
