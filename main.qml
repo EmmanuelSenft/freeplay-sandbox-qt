@@ -26,6 +26,8 @@ Window {
     property int maxRounds: 4
     property double totalPoints: 0
     property int animalLimit: 7
+    property double totalStarsGame: 0
+    property double totalStarsTest: 0
     property bool inGame: false
     property double hungerRate: 0.0075
     property string sparcMode: "sparc"
@@ -138,10 +140,10 @@ Window {
                     name: "end"
                     StateChangeScript{
                         script: {
-                            interactionEventsPub.text = "stoprecord"
                             informationScreen.visible = true
-                            informationScreen.text = "Thank you for playing the game!"
-                            buttonStart = visible = "false"
+                            informationScreen.text = "You got a total of "+totalStarsTest+" stars in the test, it's really good!"
+                            timerEnd.start()
+                            buttonStart.visible = false
                         }
                     }
             }
@@ -177,6 +179,15 @@ Window {
                     buttonStart.text = "Continue"
                     break
             }
+        }
+    }
+
+    Timer{
+        id: timerEnd
+        interval: 6000
+        onTriggered: {
+            interactionEventsPub.text = "stoprecord"
+            informationScreen.text = "Thank you for playing the game!"
         }
     }
 
@@ -801,6 +812,15 @@ Window {
             border.color: "black"
             border.width: width/100
             radius: width / 10
+
+            StarDisplay{
+                id: starDisplay
+                width: parent.width/2
+                height: parent.height/4
+                anchors.verticalCenterOffset: height/2
+                visible: false
+            }
+
             Label {
                 id: informationText
                 width: parent.width*.9
@@ -841,6 +861,7 @@ Window {
 
                 onClicked: {
                     visible = false
+                    starDisplay.visible= false
                     //if(globalStates.state == "")
                     //    tutorial.practice()
                     //else
@@ -880,7 +901,7 @@ Window {
                                 globalStates.state = "endGame"
                                 interactionEventsPub.text = "endGame"
                                 informationScreen.visible = true
-                                informationScreen.text = "This is the end of the game. \nYou achieved a total of " + Math.round(totalPoints) +" points. \nIt's impressive!"
+                                informationScreen.text = "This is the end of the game. \nYou got a total of " + totalStarsGame +" stars in the game. \nIt's impressive!"
                             }
                             else{
                                 blockingSpeech.text = "Let's try again!"
@@ -1280,8 +1301,21 @@ Window {
         id: timerScore
         interval: 5000
         onTriggered: {
+            informationScreen.text="Let's see how many stars you obtained!"
+            timerStar.start()
+        }
+    }
+
+    Timer{
+        id: timerStar
+        interval: 5000
+        onTriggered: {
             var congratulation=["Excellent", "Good job", "Well played", "Bravo"]
-            informationScreen.text="You finished with " + Math.round(sandbox.points) +" points. \n "+congratulation[rounds%4]+"!"
+            var nStars = Math.ceil(2*Math.round(sandbox.points)/1200. * 5)/2
+            totalStarsGame += nStars
+            informationScreen.text="You got "+nStars+" stars! \n "+congratulation[rounds%4]+"!\n \n \n \n"
+
+            starDisplay.showStars(nStars)
             if(rounds == maxRounds || maxRounds == 2*rounds)
                 buttonStart.text="Continue"
             else
@@ -1533,6 +1567,8 @@ Window {
         informationScreen.text = "Current condition: " + sparcMode +" "+autonomous
         rounds = 0
         totalPoints = 0
+        totalStarsGame = 0
+        totalStarsTest = 0
         console.log("reset")
     }
 }

@@ -416,6 +416,7 @@ Item {
         onTriggered: {
             var perf = getPerf()
             informationScreen.text = "You got "+perf+" stars."
+            totalStarsTest += perf
             starDisplay.showStars(perf)
             buttonFinish.visible = true
         }
