@@ -51,5 +51,9 @@
         <file>res/burk3.mp3</file>
         <file>res/burk2.mp3</file>
         <file>res/burk1.mp3</file>
+        <file>res/emptystar.png</file>
+        <file>res/fullstar.png</file>
+        <file>res/halfstar.png</file>
+        <file>StarDisplay.qml</file>
     </qresource>
 </RCC>
