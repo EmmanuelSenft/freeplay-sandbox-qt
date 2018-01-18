@@ -26,7 +26,8 @@ InteractiveItem {
     visible: false
     x: -100
     y: -100
-
+    property int centerX: x+width/2
+    property int centerY: y+height/2
 
     width: 2 * scale * parent.height * sandbox.physicalCubeSize / sandbox.physicalMapWidth
     rotation: 0
@@ -227,8 +228,8 @@ InteractiveItem {
     }
 
     function testProximity(item){
-        var dist = Math.pow(x-item.x,2)+Math.pow(y-item.y,2)
-        if(dist<12000 * Math.pow(Math.max(item.scale,scale),2) && item.name !== name)
+        var dist = Math.pow(centerX-item.centerX,2)+Math.pow(centerY-item.centerY,2)
+        if(dist<Math.pow(item.width*1.1/2.+width*1.1/2.,2) && item.name !== name)
             return true
         else
             return false

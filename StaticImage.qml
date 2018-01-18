@@ -14,6 +14,9 @@ Item {
     y: -100
     visible: false
     rotation: 0
+    property int centerX: x+width/2
+    property int centerY: y+height/2
+
     property double initialLife: .25
     property double life: initialLife
     property double lifeChange: 0
