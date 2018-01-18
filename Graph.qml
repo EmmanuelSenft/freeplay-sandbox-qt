@@ -382,10 +382,6 @@ Item {
         events.text = "start"
     }
 
-    function getStars(){
-        return [star1,star2,star3,star4,star5]
-    }
-
     function showstars(){
         informationScreen.text = "Let's look how many stars you got!"
         buttonContinue.visible = false
@@ -405,7 +401,6 @@ Item {
                 }
         }
 
-        var stars =  getStars()
         var bad = arrows.children.length - good
         var diff = good - bad/2
         if(diff<-3)
