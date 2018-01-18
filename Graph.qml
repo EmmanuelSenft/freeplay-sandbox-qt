@@ -125,6 +125,11 @@ Item {
             if (visible)
                 blockingSpeech.text = text
         }
+        onTextChanged: {
+            if (visible)
+                blockingSpeech.text = text
+        }
+
         MouseArea{
             anchors.fill: parent
         }
@@ -144,10 +149,16 @@ Item {
                 font.pixelSize: 50
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -parent.height/8
+                anchors.verticalCenterOffset: -parent.height/4
                 horizontalAlignment: Text.AlignHCenter
                 text: informationScreen.text
                 wrapMode: Text.WordWrap
+            }
+            StarDisplay{
+                id: starDisplay
+                width: parent.width/2
+                height: parent.height/4
+                visible: false
             }
             Button {
                 id: buttonReturn
@@ -182,7 +193,7 @@ Item {
 
             }
             Button {
-                id: buttonStart
+                id: buttonContinue
                 width: parent.width/3
                 height: parent.height/5
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -190,7 +201,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: parent.height/4
                 text: "I connected all I know"
-                visible: true
+                visible: false
                 style: ButtonStyle {
                     background: Rectangle {
                                 border.width: width/40
@@ -204,7 +215,37 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                         wrapMode: Text.WordWrap
                         font.pointSize: 30
-                        text: buttonStart.text
+                        text: buttonContinue.text
+                    }
+                }
+                onClicked: {
+                    showstars()
+                }
+            }
+
+            Button {
+                id: buttonFinish
+                width: parent.width/3
+                height: parent.height/5
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: parent.height/4
+                text: "Continue"
+                visible: false
+                style: ButtonStyle {
+                    background: Rectangle {
+                                border.width: width/40
+                                border.color: "black"
+                                radius: 2*border.width
+                                color: "green"
+                            }
+                    label: Text {
+                        font.family: "Helvetica"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        wrapMode: Text.WordWrap
+                        font.pointSize: 30
+                        text: buttonFinish.text
                     }
                 }
                 onClicked: {
@@ -213,8 +254,10 @@ Item {
             }
             onVisibleChanged: {
                 if(visible){
-                    buttonStart.visible = false
+                    buttonContinue.visible = false
                     buttonReturn.visible = false
+                    buttonFinish.visible = false
+                    starDisplay.visible = false
                     showButtonTimer.start()
                 }
             }
@@ -222,7 +265,7 @@ Item {
                 id:showButtonTimer
                 interval: 2000
                 onTriggered: {
-                    buttonStart.visible = true
+                    buttonContinue.visible = true
                     buttonReturn.visible = true
                 }
             }
@@ -337,6 +380,51 @@ Item {
         var d = new Date()
         startingTime = d.getTime()
         events.text = "start"
+    }
+
+    function getStars(){
+        return [star1,star2,star3,star4,star5]
+    }
+
+    function showstars(){
+        informationScreen.text = "Let's look how many stars you got!"
+        buttonContinue.visible = false
+        buttonReturn.visible = false
+        timerStar.start()
+    }
+
+    function getPerf(){
+        var good = 0
+        for(var i=arrows.children.length-1;i>=0;i--){
+            console.log(arrows.children[i].origin.name)
+            var items = interactiveitems.getActiveItems()
+            for(var j=0;j<items.length;j++)
+                if(items[j].name === arrows.children[i].origin.name && items[j].food.indexOf(arrows.children[i].end.name)>-1){
+                    good +=1
+                    continue
+                }
+        }
+
+        var stars =  getStars()
+        var bad = arrows.children.length - good
+        var diff = good - bad/2
+        if(diff<-3)
+            diff = -3
+        var perf = Math.ceil((Math.sqrt(.8*diff+3.5))*2)/2
+
+        return perf
+    }
+
+    Timer{
+        id: timerStar
+        interval: 1500
+        onTriggered: {
+            var perf = getPerf()
+            informationScreen.text = "You got "+perf+" stars."
+            starDisplay.showStars(perf)
+            buttonFinish.visible = true
+        }
+
     }
 
     function stop() {
