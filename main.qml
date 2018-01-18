@@ -691,13 +691,14 @@ Window {
 
             Timer{
                 id: timerShowEndTutoButton
-                interval: 3000
+                interval: 5000
                 repeat: false
                 onTriggered: endTutoButton.visible = true
             }
 
             onClicked: {
-                if(tutoStates.state === "endTuto")
+                console.log("Clicked "+globalStates.state+" "+tutoStates.state)
+                if(tutoStates.state === "continue")
                     tutorial.finishTuto()
             }
         }
@@ -1373,7 +1374,7 @@ Window {
                         break
                     case "goal":
                         hunger.running = true
-                        tutorial.sentence = "Animals have energy which decreases as time goes by, and they have to eat to stay alive."
+                        tutorial.sentence = "Animals have energy in green which decreases as time goes by, by becoming red, and they have to eat to stay alive."
                         break
                     case "feedFly":
                         hunger.running = true
@@ -1397,7 +1398,10 @@ Window {
                         hunger.running = false
                         break
                     case "endTuto":
-                        tutorial.sentence = "Excellent! But be careful, when an animal has no energy, it disappears. Let's start the game when you are ready."
+                        tutorial.sentence = "Excellent! By feeding the frog, you gave it more energy in green, but the fly lost energy."
+                        break
+                    case "continue":
+                        tutorial.sentence = " Be careful, when an animal has no energy, it disappears. Let's start the game when you are ready."
                         endTutoButton.show()
                         break
                 }
@@ -1413,7 +1417,7 @@ Window {
         }
         Timer {
             id: defaultSay
-            interval: 6000
+            interval: 7000
             running: false
             repeat: false
             onTriggered: {
@@ -1459,6 +1463,9 @@ Window {
                 switch (tutoStates.state){
                     case "intro":
                         tutoStates.state = "goal"
+                        break
+                    case "endTuto":
+                        tutoStates.state = "continue"
                         break
                     case "goal":
                         tutoStates.state = "feedFly"
