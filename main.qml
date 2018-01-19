@@ -948,13 +948,14 @@ Window {
             anchors.verticalCenter: parent.verticalCenter
             visible: false
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenterOffset: -parent.height/4
 
             Column {
                     id: genderquestion
                     width: 900
                     visible: true
                     anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: 50
+                    spacing: 100
 
                     function gender() {
                         if (isFemale.checked) return "female";
@@ -1023,6 +1024,65 @@ Window {
                             }
                     }
             }
+            Column {
+                    id: classquestion
+                    width: 900
+                    visible: true
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 50
+
+                    function classIn() {
+                        if (isYear4.checked) return "year4";
+                        if (isYear5.checked) return "year5";
+                        return "notspecified";
+                    }
+
+                    function reset(){
+                            isYear4.checked = false;
+                            isYear5.checked = false;
+                    }
+
+                    Text {
+                            width: parent.width
+                            horizontalAlignment: Text.AlignHCenter
+                            color: "#ffffff"
+                            text: "I am in"
+                            font.pixelSize: 50
+                    }
+
+                    Row {
+                            id: yearRow1
+                            width: childrenRect.width
+                            height: childrenRect.height
+                            spacing: 50
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.leftMargin: 50
+                            ExclusiveGroup { id: yearTabPositionGroup }
+                            Text {
+                                    color: "#b4b4b4"
+                                    text: "Year 4"
+                                    font.pixelSize: 40
+                            }
+
+                            RadioButton {
+                                    id: isYear4
+                                    exclusiveGroup: yearTabPositionGroup
+                                    style: isFemale.style
+                            }
+                            Text {
+                                    color: "#b4b4b4"
+                                    text: "Year 5"
+                                    font.pixelSize: 40
+                            }
+
+                            RadioButton {
+                                    id: isYear5
+                                    exclusiveGroup: yearTabPositionGroup
+                                    style: isFemale.style
+                            }
+                    }
+            }
+
 
             Column {
                     id: agequestion
@@ -1095,10 +1155,11 @@ Window {
                             }
                     }
                     onClicked:{
-                        var log=["demo",genderquestion.gender(),age.value]
-                        fileio.write(window.qlogfilename, log.join(","));
+                        var log=["demo",genderquestion.gender(),age.value, classquestion.classIn()]
+                        fileio.write(window.qlogfilename, log.join(","))
                         globalStates.state = "intro"
                         genderquestion.reset()
+                        classquestion.reset()
                         agequestion.reset()
                     }
             }
