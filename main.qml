@@ -1363,14 +1363,14 @@ Window {
         id: timerScore
         interval: 5000
         onTriggered: {
-            informationScreen.text="Let's see how many stars you obtained!"
+            informationScreen.text="Let's see how many stars you got!"
             timerStar.start()
         }
     }
 
     Timer{
         id: timerStar
-        interval: 5000
+        interval: 4000
         onTriggered: {
             var congratulation=["Excellent", "Good job", "Well played", "Bravo"]
             var nStars = Math.ceil(2*Math.round(sandbox.points)/1200. * 5)/2

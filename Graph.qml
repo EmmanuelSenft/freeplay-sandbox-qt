@@ -310,7 +310,7 @@ Item {
                     }
                 }
                 else{
-                    informationScreen.text = "Some animals don't have food, are you sure you want to continue?"
+                    informationScreen.text = "Some animals don't have food, are you sure you want to continue?\nBy connecting more animals you could have more stars!"
                     events.text = "no_food"
                 }
                 informationScreen.visible = true
