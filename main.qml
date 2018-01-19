@@ -1618,7 +1618,7 @@ Window {
         interactionEventsPub.text = "record_"+sparcMode+"_"+autonomous
         initTimer.start()
         var d = new Date()
-        qlogfilename = "foodchain-data/condition-"+sparcMode+"-"+autonomous+"/logs/" + d.toISOString().split(".")[0] + ".csv"
+        qlogfilename = "foodchain-data/logs/condition-"+sparcMode+"-"+autonomous+"/" + d.toISOString().split(".")[0] + ".csv"
 
         //globalStates.state = "pretest"
         //tutoStates.state = "intro"
