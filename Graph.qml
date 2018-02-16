@@ -302,16 +302,18 @@ Item {
                     if(arrows.children.length>imageNames.length-targets.length+1){
                         events.text = "good"
                         informationScreen.text = "Are you sure that all the animals are connected to their food?"
+                        showButtonTimer.interval=2500
                     }
                     else{
-                        informationScreen.text = "Are you sure that all the animals are connected to their food? Some animals eat many things."
+                        informationScreen.text = "Are you sure that all the animals are connected to their food? Some animals eat many things.\nBy connecting more animals you could have more stars!"
                         events.text = "low_arrow"
-
+                        showButtonTimer.interval=5500
                     }
                 }
                 else{
                     informationScreen.text = "Some animals don't have food, are you sure you want to continue?\nBy connecting more animals you could have more stars!"
                     events.text = "no_food"
+                    showButtonTimer.interval=5500
                 }
                 informationScreen.visible = true
             }
