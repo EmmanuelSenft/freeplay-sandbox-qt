@@ -698,8 +698,7 @@ Window {
 
             onClicked: {
                 console.log("Clicked "+globalStates.state+" "+tutoStates.state)
-                if(tutoStates.state === "continue")
-                    tutorial.finishTuto()
+                tutorial.finishTuto()
             }
         }
 
@@ -1389,6 +1388,7 @@ Window {
     Item{
         id: tutorial
         property bool flyFed: false
+        property bool frogFed: false
         property bool deadFrog: false
         property bool introduced: false
         property string sentence: ""
@@ -1420,6 +1420,9 @@ Window {
                     name: "endTuto"
                 },
                 State {
+                    name: "continue"
+                },
+                State {
                     name: "done"
                 }
 
@@ -1432,6 +1435,8 @@ Window {
                         tutorial.setupTutorial()
                         tutorial.sentence = "Welcome to the game. The goal is to keep all the animals alive as long as possible."
                         tutorial.introduced = true
+                        tutorial.flyFed = false
+                        tutorial.frogFed = false
                         break
                     case "goal":
                         hunger.running = true
@@ -1459,9 +1464,13 @@ Window {
                         hunger.running = false
                         break
                     case "endTuto":
+                        tutorial.frogFed = true
                         tutorial.sentence = "Excellent! By feeding the frog, you gave it more energy in green, but the fly lost energy."
                         break
                     case "continue":
+                        frog.movable = true
+                        fly.movable = true
+                        hunger.running = true
                         tutorial.sentence = " Be careful, when an animal has no energy, it disappears. Let's start the game when you are ready."
                         endTutoButton.show()
                         break
@@ -1544,6 +1553,9 @@ Window {
                     //    break
                     case "deadAnimal":
                         setupTutorial()
+                        if(tutorial.frogFed)
+                            tutoStates.state = "continue"
+                            return
                         if(tutorial.flyFed)
                             tutoStates.state = "feedFrog"
                         else
@@ -1563,12 +1575,12 @@ Window {
     }
 
     function animalDying(name){
-        if(tutoStates.state !== "" && tutoStates.state !== "endTuto" && tutoStates.state !== "done" && tutoStates.state !== "deadAnimal" &&  (name === "frog" || name === "fly")){
+        if(tutoStates.state !== "" && tutoStates.state !== "endTuto" && tutoStates.state !== "done" && tutoStates.state !== "continue" && tutoStates.state !== "deadAnimal" &&  (name === "frog" || name === "fly")){
             tutoStates.state = "deadAnimal"
             if(tutorial.flyFed && name === "frog")
                 tutorial.deadFrog = true
         }
-        if(tutoStates.state === "endTuto"){
+        if(tutoStates.state === "endTuto" || tutoStates.state === "continue"){
             tutorial.sentence = "For the tutorial, animals revive, but not for the real game, be careful."
             tutorial.setupTutorial()
             frog.movable = true
