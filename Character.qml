@@ -79,7 +79,7 @@ InteractiveItem {
         id: soundPlayer
         property bool isPlaying: false
         property var startTime: 0
-        property int yuckMax: 10
+        property int yuckMax: 7
         property int yumMax: 8
         property int fleeMax: 7
         property int eatenMax: 7
