@@ -68,10 +68,10 @@ ProgressBar {
     }
     SequentialAnimation{
         id:blinkAnimation
-        NumberAnimation {target: blinkFrame; property: "opacity"; from: 0; to: .5; duration: 200}
-        NumberAnimation {target: blinkFrame; property: "opacity"; from: .5; to: 0; duration: 200}
-        NumberAnimation {target: blinkFrame; property: "opacity"; from: 0; to: .5; duration: 200}
-        NumberAnimation {target: blinkFrame; property: "opacity"; from: .5; to: 0; duration: 200}
+        NumberAnimation {target: blinkFrame; property: "opacity"; from: 0; to: .8; duration: 200}
+        NumberAnimation {target: blinkFrame; property: "opacity"; from: .8; to: 0; duration: 200}
+        NumberAnimation {target: blinkFrame; property: "opacity"; from: 0; to: .8; duration: 200}
+        NumberAnimation {target: blinkFrame; property: "opacity"; from: .8; to: 0; duration: 200}
     }
     onRatioChanged: {
         if(ratio === 0) value = 0.991

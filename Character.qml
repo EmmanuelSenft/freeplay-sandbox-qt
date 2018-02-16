@@ -155,11 +155,13 @@ InteractiveItem {
                     failInteraction(name, list[i].name)
                     list[i].flee()
                     soundPlayer.runYuck()
+                    blink("gold")
                 }
                 else{
                     flee()
                     failInteraction(name, list[i].name)
                     soundPlayer.runFlee()
+                    blink("darkturquoise")
                 }
             }
         }
@@ -177,6 +179,7 @@ InteractiveItem {
                     if(!soundPlayer.isPlaying){
                         failInteraction(name, list[i].name)
                         soundPlayer.runYuck()
+                        blink("gold")
                     }
                 }
             }
