@@ -65,5 +65,10 @@
         <file>res/eaten7.mp3</file>
         <file>res/eaten6.mp3</file>
         <file>res/eaten5.mp3</file>
+        <file>ActivityType.qml</file>
+        <file>res/class.png</file>
+        <file>res/game.png</file>
+        <file>res/confused.png</file>
+        <file>res/bored.png</file>
     </qresource>
 </RCC>

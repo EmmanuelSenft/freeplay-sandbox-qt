@@ -186,8 +186,7 @@ Window {
         id: timerEnd
         interval: 6000
         onTriggered: {
-            interactionEventsPub.text = "stoprecord"
-            informationScreen.text = "Thank you for playing the game!"
+            activityType.visible=true
         }
     }
 
@@ -936,6 +935,12 @@ Window {
     Graph {
         id: graph
         visible: false
+    }
+
+    ActivityType {
+        id: activityType
+        visible: false
+        z:10
     }
 
     ColumnLayout {
