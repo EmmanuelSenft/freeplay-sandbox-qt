@@ -12,9 +12,7 @@ Item {
         objectName: "interactive"
 
         property string name
-        property string image
-
-
+        property string image: "res/"+name+".png"
         property var boundingbox:
             Polygon {
                 id:bbpoly
@@ -52,11 +50,11 @@ Item {
             }
 
             // Draw a red border around the interactive items
-            //Rectangle {
-            //    color:"transparent"
-            //    anchors.fill:parent
-            //    border.color: "red"
-            //}
+            Rectangle {
+                color:"transparent"
+                anchors.fill:parent
+                border.color: "red"
+            }
         }
         Body {
                 id: cubeBody
@@ -73,24 +71,6 @@ Item {
                 linearDamping: 5
         }
 
-//   PinchArea {
-//           anchors.fill: parent
-//           pinch.target: parent
-//           pinch.minimumRotation: -360
-//           pinch.maximumRotation: 360
-//           //pinch.minimumScale: 1
-//           //pinch.maximumScale: 1
-//           pinch.dragAxis: Pinch.XAndYAxis
-
-//           MouseArea {
-//                   anchors.fill: parent
-//                   drag.target: item
-//                   scrollGestureEnabled: false
-//           }
-//   }
-
-
-
     Item {
         id: objectCenter
         anchors.centerIn: parent
@@ -103,12 +83,7 @@ Item {
             origin: mapOrigin
             parentframe: mapOrigin.name
 
-            pixelscale: sandbox.pixel2meter
+            pixelscale: sandbox.pixel2meter/.07
         }
     }
-
-    function isIn(tx, ty) {
-        return (tx > x) && (tx < x + width) && (ty > y) && (ty < y + height);
-    }
-
 }

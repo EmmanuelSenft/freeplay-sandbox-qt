@@ -48,6 +48,7 @@ TouchPoint {
             // find out whether we touched an item
             var obj = interactiveitems.childAt(x, y);
             if (obj.objectName === "interactive") {
+                obj.pressed()
 
                 movingItem = true;
 
@@ -60,27 +61,16 @@ TouchPoint {
                 joint.target = Qt.point(x, y);
                 joint.bodyB = obj.body;
             }
-            else {
-                if (drawingarea.drawEnabled) {
-                    currentStroke = [];
-                    color = drawingarea.fgColor;
-                    drawing = true;
-                }
-            }
-
         }
         else { // released
             if(movingItem) {
+                var obj = interactiveitems.childAt(x, y);
+                if (obj.objectName === "interactive") {
+                    obj.released()
+                }
+
                 joint.bodyB = null;
                 movingItem = false;
-            }
-
-            if(drawing) {
-                drawing = false;
-                if (drawingarea.drawEnabled) {
-                    drawingarea.finishStroke(currentStroke);
-                }
-                currentStroke = [];
             }
         }
     }
@@ -100,7 +90,5 @@ TouchPoint {
                             pixelscale: sandbox.pixel2meter
                         }
     }
-
-
 }
 
