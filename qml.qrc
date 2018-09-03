@@ -11,15 +11,17 @@
         <file>TouchJoint.qml</file>
         <file>res/tags/markers.svg</file>
         <file>res/commercial.png</file>
-        <file>res/empty.png</file>
-        <file>res/factory.png</file>
         <file>res/fire.png</file>
         <file>res/full.png</file>
         <file>res/hospital.png</file>
         <file>res/police.png</file>
         <file>res/residence.png</file>
-        <file>res/square.png</file>
         <file>StaticImage.qml</file>
         <file>res/target.png</file>
+        <file>res/church.png</file>
+        <file>res/desert.png</file>
+        <file>res/manor.png</file>
+        <file>res/plant.png</file>
+        <file>res/empty.png</file>
     </qresource>
 </RCC>

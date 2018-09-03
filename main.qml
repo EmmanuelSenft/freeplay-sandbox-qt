@@ -12,21 +12,8 @@ Window {
 
     visible: true
     visibility: Window.FullScreen
-    //width: Screen.width
-    //height: Screen.height
-    width:800
-    height: 600
-
-    property int prevWidth:800
-    property int prevHeight:600
-
-    onWidthChanged: {
-        prevWidth=width;
-    }
-    onHeightChanged: {
-        prevHeight=height;
-
-    }
+    width: Screen.width
+    height: Screen.height
 
     color: "black"
     title: qsTr("Free-play sandbox")
@@ -78,7 +65,7 @@ Window {
             anchors.left: parent.left
             anchors.top: parent.top
             visible: true
-            source: "res/full.png"
+            source: "res/map.svg"
 
             Item {
                 // this item sticks to the 'visual' origin of the map, taking into account
@@ -278,43 +265,45 @@ Window {
             world: physicsWorld
         }
         Item {
-            id: destinations
-            property int number: 2
-            property int mapNumber: 0
+            id: maps
+            visible: true
             anchors.fill: parent
-            StaticImage {
-                id: destination0
-                number: 0
-                property var names: ["commercial","factory"]
-                name: names[destinations.mapNumber]
-                property var xs:[100,300]
-                property var ys:[100,400]
-                x: xs[destinations.mapNumber]
-                y: ys[destinations.mapNumber]
+            //-1 empty, 0 desert, 1 residence, 2 manor, 3 desert, 4 police, 5 fire, 6 church, 7 hospital, 8 plant, 9 commercial
+            property var names: ["", "residence", "manor", "desert", "police", "fire", "church", "hospital", "plant", "commercial"]
+            property var map1: [ 1, 6, 8, 1,-6, 7, 1,-2, 1,
+                                 1, 5, 0, 1, 9, 1, 4, 5, 1,
+                                 1,-4, 7,-1, 0, 3, 1, 0, 6,
+                                 1, 9, 0, 4,-5, 1, 5,-3, 1,
+                                 1, 1, 2, 1, 9, 1, 0, 7, 1]
+            property var targets: [1,2,9,4,1,4]
+            property var currentId: 0
+            property var currentType: names[targets[currentId]]
+            Item{
+                id: caseLists
                 visible: true
+                anchors.fill:parent
             }
-            StaticImage {
-                id: destination1
-                number: 1
-                property var names: ["commercial","fire"]
-                name: names[destinations.mapNumber]
-                property var xs:[100,300]
-                property var ys:[600,100]
-                x: xs[destinations.mapNumber]
-                y: ys[destinations.mapNumber]
-                visible: true
+            Component.onCompleted: {
+                for(var i=0; i<45; i++){
+                    var component = Qt.createComponent("StaticImage.qml")
+                    var newCase = component.createObject(caseLists,{"x":window.width/2+(i%9-4)*window.width/9-80,"y":parseInt(i/9)*window.height/5+30,"number":map1[i]})
+                    if(map1[i]<1){
+
+                        newCase.image = "res/empty.png"
+                    }
+                    else
+                        newCase.image = "res/"+names[map1[i]]+".png"
+                }
             }
-            function reset(){
-                destination0.image="res/"+"target"+".png"
-                destination1.image="res/"+"target"+".png"
+            function endMap(){
+                console.log("Done")
             }
-            function getDestinations() {return [destination0,destination1]}
         }
 
         Character {
             id: movingItem
-            number: 0
-            name: destination0.names[0]
+            number: -maps.currentId-1
+            name: maps.currentType
             x: parent.width/2-width/2
             y: parent.height/2-height/2
         }

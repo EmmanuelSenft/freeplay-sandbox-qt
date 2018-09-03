@@ -54,6 +54,7 @@ Item {
                 color:"transparent"
                 anchors.fill:parent
                 border.color: "red"
+                border.width: parent.width/20
             }
         }
         Body {
@@ -83,7 +84,7 @@ Item {
             origin: mapOrigin
             parentframe: mapOrigin.name
 
-            pixelscale: sandbox.pixel2meter/.07
+            pixelscale: 9/sandbox.width
         }
     }
 }

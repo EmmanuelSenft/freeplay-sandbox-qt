@@ -55,25 +55,23 @@ InteractiveItem {
         id: updateDestination
         interval: 100
         onTriggered: {
-            var under=destinations.childAt(x+width/2,y+height/2)
-            if(under === null)
+            var under=caseLists.childAt(x+width/2,y+height/2)
+            if(under === null){
+                console.log("nothing")
                 return
-            if(under.name===name && under.number == number){
+            }
+            if(under.number == number){
                 under.image = "res/"+name+".png"
                 x= map.width/2-width/2
                 y= map.height/2-height/2
-                if(number == destinations.number-1){
-                    console.log("rest")
-                    destinations.mapNumber+=1
-                    number=0
-                    destinations.reset()
+                if(number == -maps.targets.length){
+                    maps.endMap()
                 }
                 else{
                     console.log("normal")
-                    number += 1
+                    maps.currentId += 1
+                    under.name=name
                 }
-                var dest=destinations.getDestinations()[number]
-                name=dest.names[destinations.mapNumber]
             }
         }
     }

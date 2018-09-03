@@ -7,7 +7,7 @@ import Box2D 2.0
 Item {
     id: staticImage
     property double scale: 1.6
-    width: 2 * scale * parent.height * sandbox.physicalCubeSize / sandbox.physicalMapWidth
+    width: 160
     height: width
     x: -100
     y: -100
@@ -42,7 +42,7 @@ Item {
             }
 
     Image {
-        id: image
+        id: im
         fillMode: Image.PreserveAspectFit
         anchors.fill: parent
         source: parent.image
@@ -63,4 +63,5 @@ Item {
         anchors.centerIn: parent
         rotation: parent.rotation
     }
+    onImageChanged: console.log(image)
 }
