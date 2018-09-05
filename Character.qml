@@ -55,6 +55,7 @@ InteractiveItem {
         id: updateDestination
         interval: 100
         onTriggered: {
+            console.log(number)
             var under=caseLists.childAt(x+width/2,y+height/2)
             if(under === null){
                 console.log("nothing")
@@ -64,7 +65,7 @@ InteractiveItem {
                 under.image = "res/"+name+".png"
                 x= map.width/2-width/2
                 y= map.height/2-height/2
-                if(number == -maps.targets.length){
+                if(number == -maps.targets[maps.mapNumber].length){
                     maps.endMap()
                 }
                 else{
