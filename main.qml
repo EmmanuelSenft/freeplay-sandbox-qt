@@ -1,6 +1,8 @@
-import QtQuick 2.2
+import QtQuick 2.7
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
+import QtQuick.Controls 1.4
+ import QtQuick.Controls.Styles 1.4
 
 import Box2D 2.0
 
@@ -23,6 +25,26 @@ Window {
 
         states: [
             // default state ("") is a blank, black, screen
+            State {
+                name: "start"
+                PropertyChanges {
+                   target: startPanel
+                   visible: true
+               }
+                StateChangeScript {
+                     script: {
+                         condition.visible=false
+                         maps.createMap()
+                     }
+                 }
+            },
+            State {
+                name: "tuto"
+                PropertyChanges {
+                   target: tutoPanel
+                   visible: true
+               }
+            },
 
             State {
                 name: "placement"
@@ -30,9 +52,13 @@ Window {
                     target: sandbox
                     visible: true
                 }
-               StateChangeScript {
-                    script: interactiveitems.startPlacement();
-                }
+            },
+            State {
+                name: "end"
+                PropertyChanges {
+                   target: sandbox
+                   visible: false
+               }
             }
         ]
     }
@@ -46,11 +72,242 @@ Window {
         topic: "sandtray/signals/blank_interface"
         onTriggered: globalstates.state = "";
     }
+    Item {
+        id: condition
+        anchors.fill: parent
+        visible: true
+        Grid {
+            anchors.fill:parent
+            columns: 2
+            spacing: width/10
+            topPadding: spacing
+            leftPadding: spacing
+            rightPadding: spacing
+            horizontalItemAlignment: Grid.AlignHCenter
+            verticalItemAlignment: Grid.AlignVCenter
+            property int cellWidth: (width-(columns+1)*spacing)/columns
+            property int cellHeight: height/5
+            Button{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                text: "Condition: Dynamic-NonAmbiguous Map 1-2"
+                onClicked: {condition.start(0,"D-N")}
+            }
+            Button{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                text: "Condition: Dynamic-NonAmbiguous Map 2-1"
+                onClicked: {condition.start(1,"D-N")}
+            }
+            Button{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                text: "Condition: NonAmbiguous-Dynamic Map 1-2"
+                onClicked: {condition.start(0,"N-D")}
+            }
+            Button{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                text: "Condition: NonAmbiguous-Dynamic Map 2-1"
+                onClicked: {condition.start(1,"N-D")}
+            }
+        }
+        function start(order, condition){
+            maps.order=order
+            globalstates.state="start"
+        }
+    }
+
+    Item {
+        id: startPanel
+        anchors.fill: parent
+        visible: false
+        Button{
+            width: parent.width/5
+            height: parent.height/5
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "Start"
+            onClicked: {globalstates.state="tuto"}
+        }
+    }
+
+    Item {
+        id: tutoPanel
+        anchors.fill: parent
+        visible: false
+        Grid {
+            anchors.fill:parent
+            columns: 6
+            spacing: width/20
+            topPadding: spacing
+            leftPadding: spacing
+            rightPadding: spacing
+            horizontalItemAlignment: Grid.AlignHCenter
+            verticalItemAlignment: Grid.AlignVCenter
+            property int cellWidth: (width-(columns+1)*spacing)/columns
+            property int cellHeight: height/5
+            Image {
+                width: parent.cellWidth
+                height: parent.cellHeight
+                fillMode: Image.PreserveAspectFit
+                source: "res/church.png"
+            }
+            Label{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text:"Church"
+                color: "white"
+                wrapMode: Text.WordWrap
+                font.pixelSize: 40
+            }
+            Image {
+                width: parent.cellWidth
+                height: parent.cellHeight
+                fillMode: Image.PreserveAspectFit
+                source: "res/commercial.png"
+            }
+            Label{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text:"Commercial District"
+                color: "white"
+                wrapMode: Text.WordWrap
+                font.pixelSize: 40
+            }
+            Image {
+                width: parent.cellWidth
+                height: parent.cellHeight
+                fillMode: Image.PreserveAspectFit
+                source: "res/desert.png"
+            }
+            Label{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text:"Factory"
+                color: "white"
+                wrapMode: Text.WordWrap
+                font.pixelSize: 40
+            }
+            Image {
+                width: parent.cellWidth
+                height: parent.cellHeight
+                fillMode: Image.PreserveAspectFit
+                source: "res/fire.png"
+            }
+            Label{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text:"Fire Department"
+                color: "white"
+                wrapMode: Text.WordWrap
+                font.pixelSize: 40
+            }
+            Image {
+                width: parent.cellWidth
+                height: parent.cellHeight
+                fillMode: Image.PreserveAspectFit
+                source: "res/hospital.png"
+            }
+            Label{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text:"Hospital"
+                color: "white"
+                wrapMode: Text.WordWrap
+                font.pixelSize: 40
+            }
+            Image {
+                width: parent.cellWidth
+                height: parent.cellHeight
+                fillMode: Image.PreserveAspectFit
+                source: "res/manor.png"
+            }
+            Label{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text:"Manor"
+                color: "white"
+                wrapMode: Text.WordWrap
+                font.pixelSize: 40
+            }
+            Image {
+                width: parent.cellWidth
+                height: parent.cellHeight
+                fillMode: Image.PreserveAspectFit
+                source: "res/police.png"
+            }
+            Label{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text:"Police Department"
+                color: "white"
+                wrapMode: Text.WordWrap
+                font.pixelSize: 40
+            }
+            Image {
+                width: parent.cellWidth
+                height: parent.cellHeight
+                fillMode: Image.PreserveAspectFit
+                source: "res/plant.png"
+            }
+            Label{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text:"Power Plant"
+                color: "white"
+                wrapMode: Text.WordWrap
+                font.pixelSize: 40
+            }
+            Image {
+                width: parent.cellWidth
+                height: parent.cellHeight
+                fillMode: Image.PreserveAspectFit
+                source: "res/residence.png"
+            }
+            Label{
+                width: parent.cellWidth
+                height: parent.cellHeight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                text:"Residence"
+                color: "white"
+                wrapMode: Text.WordWrap
+                font.pixelSize: 40
+            }
+        }
+
+        Button{
+            width: parent.width/5
+            height: parent.height/15
+            text: "Continue"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: height/2
+            onClicked: {globalstates.state="placement"}
+        }
+    }
 
     Item {
         id: sandbox
         anchors.fill:parent
-        visible: true
+        visible: false
 
         //property double physicalMapWidth: 553 //mm (desktop acer monitor)
         property double physicalMapWidth: 600 //mm (sandtray)
@@ -84,7 +341,7 @@ Window {
 
         anchors.fill: parent
 
-        visible: true
+        visible: sandbox.visible
 
         property var collisionCategories: Box.All
         property int currentMaxZ: 0 // hold the max Z value, incremented every time an interactive item is clicked. This allows proper restacking of objects by sequentially clicking them
@@ -268,35 +525,58 @@ Window {
             id: maps
             visible: true
             anchors.fill: parent
-            //-1 empty, 0 desert, 1 residence, 2 manor, 3 desert, 4 police, 5 fire, 6 church, 7 hospital, 8 plant, 9 commercial
+            property var order: 0
+            //-X targets, 0 empty, 1 residence, 2 manor, 3 desert, 4 police, 5 fire, 6 church, 7 hospital, 8 plant, 9 commercial
             property var names: ["", "residence", "manor", "desert", "police", "fire", "church", "hospital", "plant", "commercial"]
-            property var map1: [ 1, 6, 8, 1,-6, 7, 1,-2, 1,
-                                 1, 5, 0, 1, 9, 1, 4, 5, 1,
-                                 1,-4, 7,-1, 0, 3, 1, 0, 6,
-                                 1, 9, 0, 4,-5, 1, 5,-3, 1,
-                                 1, 1, 2, 1, 9, 1, 0, 7, 1]
-            property var targets: [1,2,9,4,1,4]
+            property var mapDesc: [ [ 1, 6, 8, 1,-6, 7, 1,-2, 1,
+                                     1, 5, 0, 1, 9, 1, 4, 5, 1,
+                                     1,-4, 7,-1, 0, 3, 1, 0, 6,
+                                     1, 9, 0, 4,-5, 1, 5,-3, 1,
+                                     1, 1, 2, 1, 9, 1, 0, 7, 1],
+                                   [ 1, 9, 0, 5,-1, 1, 6, 1, 1,
+                                     1, 6, 4, 1, 9,-5, 0,-2, 1,
+                                    -6,-7, 1, 2, 0, 4, 1, 1, 1,
+                                     4, 1, 1, 1, 1, 9,-4, 5, 1,
+                                    -3, 3, 9, 0, 5, 0, 4, 1, 1]]
+            property var targets: [[1,2,9,4,1,4],[7,7,1,7,1,2,8]]
+
+            property var mapNumber: order
             property var currentId: 0
-            property var currentType: names[targets[currentId]]
+            property var currentType: names[targets[mapNumber][currentId]]
             Item{
                 id: caseLists
                 visible: true
                 anchors.fill:parent
             }
-            Component.onCompleted: {
+            function createMap(){
+                console.log(mapNumber)
                 for(var i=0; i<45; i++){
                     var component = Qt.createComponent("StaticImage.qml")
-                    var newCase = component.createObject(caseLists,{"x":window.width/2+(i%9-4)*window.width/9-80,"y":parseInt(i/9)*window.height/5+30,"number":map1[i]})
-                    if(map1[i]<1){
-
+                    var newCase = component.createObject(caseLists,{"x":window.width/2+(i%9-4)*window.width/9-80,"y":parseInt(i/9)*window.height/5+30,"number":mapDesc[mapNumber][i]})
+                    if(mapDesc[mapNumber][i]<1){
                         newCase.image = "res/empty.png"
                     }
                     else
-                        newCase.image = "res/"+names[map1[i]]+".png"
+                        newCase.image = "res/"+names[mapDesc[mapNumber][i]]+".png"
                 }
             }
             function endMap(){
                 console.log("Done")
+                if(maps.mapNumber!=order){
+                    globalstates.state ="end"
+                    return
+                }
+                maps.mapNumber=!order
+                currentId=0
+                for(var i = 0; i<caseLists.children.length;i++){
+                    caseLists.children[i].number=mapDesc[mapNumber][i]
+                    if(mapDesc[mapNumber][i]<1){
+                        caseLists.children[i].image = "res/empty.png"
+                    }
+                    else
+                        caseLists.children[i].image = "res/"+names[mapDesc[mapNumber][i]]+".png"
+                }
+
             }
         }
 
