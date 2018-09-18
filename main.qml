@@ -3,6 +3,8 @@ import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 1.4
  import QtQuick.Controls.Styles 1.4
+import QtQuick.Layouts 1.1
+import QtTest 1.1
 
 import Box2D 2.0
 
@@ -17,11 +19,15 @@ Window {
     width: Screen.width
     height: Screen.height
 
+    property string  qlogfilename: ""
+    property var startingTime:""
+
     color: "black"
     title: qsTr("Free-play sandbox")
 
     StateGroup {
         id: globalstates
+        state: "start"
 
         states: [
             // default state ("") is a blank, black, screen
@@ -34,7 +40,6 @@ Window {
                 StateChangeScript {
                      script: {
                          condition.visible=false
-                         maps.createMap()
                      }
                  }
             },
@@ -45,33 +50,54 @@ Window {
                    visible: true
                }
             },
-
             State {
-                name: "placement"
+                name: "placement1"
                  PropertyChanges {
                     target: sandbox
                     visible: true
                 }
+                 StateChangeScript {
+                      script: {
+                          maps.updateMap()
+                          publish("start_placement1")
+                      }
+                  }
+            },
+            State {
+                name: "midScreen"
+                 PropertyChanges {
+                    target: midPanel
+                    visible: true
+                }
+            },
+            State {
+                name: "placement2"
+                 PropertyChanges {
+                    target: sandbox
+                    visible: true
+                }
+                 StateChangeScript {
+                      script: {
+                          maps.updateMap()
+                          publish("start_placement2")
+                      }
+                  }
             },
             State {
                 name: "end"
                 PropertyChanges {
-                   target: sandbox
-                   visible: false
+                   target: endPanel
+                   visible: true
                }
+                StateChangeScript {
+                     script: {
+                         publish("endStudy")
+                     }
+                 }
             }
         ]
     }
 
-    RosSignal {
-        topic: "sandtray/signals/start_placement"
-        onTriggered: globalstates.state = "placement";
-    }
-
-    RosSignal {
-        topic: "sandtray/signals/blank_interface"
-        onTriggered: globalstates.state = "";
-    }
     Item {
         id: condition
         anchors.fill: parent
@@ -87,25 +113,25 @@ Window {
             verticalItemAlignment: Grid.AlignVCenter
             property int cellWidth: (width-(columns+1)*spacing)/columns
             property int cellHeight: height/5
-            Button{
+            PrettyButton{
                 width: parent.cellWidth
                 height: parent.cellHeight
                 text: "Condition: Dynamic-NonAmbiguous Map 1-2"
                 onClicked: {condition.start(0,"D-N")}
             }
-            Button{
+            PrettyButton{
                 width: parent.cellWidth
                 height: parent.cellHeight
                 text: "Condition: Dynamic-NonAmbiguous Map 2-1"
                 onClicked: {condition.start(1,"D-N")}
             }
-            Button{
+            PrettyButton{
                 width: parent.cellWidth
                 height: parent.cellHeight
                 text: "Condition: NonAmbiguous-Dynamic Map 1-2"
                 onClicked: {condition.start(0,"N-D")}
             }
-            Button{
+            PrettyButton{
                 width: parent.cellWidth
                 height: parent.cellHeight
                 text: "Condition: NonAmbiguous-Dynamic Map 2-1"
@@ -115,6 +141,7 @@ Window {
         function start(order, condition){
             maps.order=order
             globalstates.state="start"
+            publish("Condition:"+condition+" Starting map: "+(order+1))
         }
     }
 
@@ -122,13 +149,63 @@ Window {
         id: startPanel
         anchors.fill: parent
         visible: false
-        Button{
+
+        PrettyButton{
             width: parent.width/5
             height: parent.height/5
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             text: "Start"
-            onClicked: {globalstates.state="tuto"}
+            onClicked: {
+                var d = new Date()
+                startingTime = d.getTime()
+                qlogfilename = "placement-data/"+d.toISOString().split(".")[0].replace(":","-").replace(":","-")
+                globalstates.state="tuto"
+                publish("startStudy_"+qlogfilename)
+            }
+        }
+    }
+
+    Item {
+        id: midPanel
+        anchors.fill: parent
+        visible: false
+        PrettyLabel{
+            width: parent.width/2
+            height: parent.height/5
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: -height
+            anchors.horizontalCenter: parent.horizontalCenter
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            text:"You finished the first map, now the roles are inverted."
+        }
+        PrettyButton{
+            width: parent.width/5
+            height: parent.height/5
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: height
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "Start"
+            onClicked: {
+                globalstates.state="placement2"
+            }
+        }
+    }
+
+    Item {
+        id: endPanel
+        anchors.fill: parent
+        visible: false
+        PrettyLabel{
+            width: parent.width/2
+            height: parent.height/5
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: -height
+            anchors.horizontalCenter: parent.horizontalCenter
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            text:"You finished the study, thank you for participating."
         }
     }
 
@@ -153,15 +230,10 @@ Window {
                 fillMode: Image.PreserveAspectFit
                 source: "res/church.png"
             }
-            Label{
+            PrettyLabel{
                 width: parent.cellWidth
                 height: parent.cellHeight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
                 text:"Church"
-                color: "white"
-                wrapMode: Text.WordWrap
-                font.pixelSize: 40
             }
             Image {
                 width: parent.cellWidth
@@ -169,31 +241,21 @@ Window {
                 fillMode: Image.PreserveAspectFit
                 source: "res/commercial.png"
             }
-            Label{
+            PrettyLabel{
                 width: parent.cellWidth
                 height: parent.cellHeight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
                 text:"Commercial District"
-                color: "white"
-                wrapMode: Text.WordWrap
-                font.pixelSize: 40
             }
             Image {
                 width: parent.cellWidth
                 height: parent.cellHeight
                 fillMode: Image.PreserveAspectFit
-                source: "res/desert.png"
+                source: "res/factory.png"
             }
-            Label{
+            PrettyLabel{
                 width: parent.cellWidth
                 height: parent.cellHeight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
                 text:"Factory"
-                color: "white"
-                wrapMode: Text.WordWrap
-                font.pixelSize: 40
             }
             Image {
                 width: parent.cellWidth
@@ -201,15 +263,10 @@ Window {
                 fillMode: Image.PreserveAspectFit
                 source: "res/fire.png"
             }
-            Label{
+            PrettyLabel{
                 width: parent.cellWidth
                 height: parent.cellHeight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
                 text:"Fire Department"
-                color: "white"
-                wrapMode: Text.WordWrap
-                font.pixelSize: 40
             }
             Image {
                 width: parent.cellWidth
@@ -217,15 +274,10 @@ Window {
                 fillMode: Image.PreserveAspectFit
                 source: "res/hospital.png"
             }
-            Label{
+            PrettyLabel{
                 width: parent.cellWidth
                 height: parent.cellHeight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
                 text:"Hospital"
-                color: "white"
-                wrapMode: Text.WordWrap
-                font.pixelSize: 40
             }
             Image {
                 width: parent.cellWidth
@@ -233,15 +285,10 @@ Window {
                 fillMode: Image.PreserveAspectFit
                 source: "res/manor.png"
             }
-            Label{
+            PrettyLabel{
                 width: parent.cellWidth
                 height: parent.cellHeight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
                 text:"Manor"
-                color: "white"
-                wrapMode: Text.WordWrap
-                font.pixelSize: 40
             }
             Image {
                 width: parent.cellWidth
@@ -249,58 +296,43 @@ Window {
                 fillMode: Image.PreserveAspectFit
                 source: "res/police.png"
             }
-            Label{
+            PrettyLabel{
                 width: parent.cellWidth
                 height: parent.cellHeight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
                 text:"Police Department"
-                color: "white"
-                wrapMode: Text.WordWrap
-                font.pixelSize: 40
             }
             Image {
                 width: parent.cellWidth
                 height: parent.cellHeight
                 fillMode: Image.PreserveAspectFit
-                source: "res/plant.png"
+                source: "res/power.png"
             }
-            Label{
+            PrettyLabel{
                 width: parent.cellWidth
                 height: parent.cellHeight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
                 text:"Power Plant"
-                color: "white"
-                wrapMode: Text.WordWrap
-                font.pixelSize: 40
             }
             Image {
                 width: parent.cellWidth
                 height: parent.cellHeight
                 fillMode: Image.PreserveAspectFit
-                source: "res/residence.png"
+                source: "res/residential.png"
             }
-            Label{
+            PrettyLabel{
                 width: parent.cellWidth
                 height: parent.cellHeight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
                 text:"Residence"
-                color: "white"
-                wrapMode: Text.WordWrap
-                font.pixelSize: 40
             }
         }
 
-        Button{
+        PrettyButton{
             width: parent.width/5
             height: parent.height/15
             text: "Continue"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: height/2
-            onClicked: {globalstates.state="placement"}
+            onClicked: {globalstates.state="placement1"}
         }
     }
 
@@ -322,7 +354,7 @@ Window {
             anchors.left: parent.left
             anchors.top: parent.top
             visible: true
-            source: "res/map.svg"
+            source: "res/BG1.png"
 
             Item {
                 // this item sticks to the 'visual' origin of the map, taking into account
@@ -441,16 +473,12 @@ Window {
                 running: false
                 onTriggered: {
                     console.log("Auto-releasing ROS contact with " + parent.draggedObject);
-                    interactionEvents.text = "releasing_" + parent.draggedObject;
+                    interactionEvents.text = "robot_releasing_" + parent.draggedObject;
                     parent.draggedObject = "";
                     parent.target = null;
                     externalJoint.bodyB = null;
                     robot_hand.visible=false;
                 }
-            }
-            RosStringPublisher {
-                id: interactionEvents
-                topic: "sandtray/interaction_events"
             }
         }
 
@@ -526,8 +554,8 @@ Window {
             visible: true
             anchors.fill: parent
             property var order: 0
-            //-X targets, 0 empty, 1 residence, 2 manor, 3 desert, 4 police, 5 fire, 6 church, 7 hospital, 8 plant, 9 commercial
-            property var names: ["", "residence", "manor", "desert", "police", "fire", "church", "hospital", "plant", "commercial"]
+            //-X targets, 0 empty, 1 residential, 2 manor, 3 factory, 4 police, 5 fire, 6 church, 7 hospital, 8 power, 9 commercial
+            property var names: ["", "residential", "manor", "factory", "police", "fire", "church", "hospital", "power", "commercial"]
             property var mapDesc: [ [ 1, 6, 8, 1,-6, 7, 1,-2, 1,
                                      1, 5, 0, 1, 9, 1, 4, 5, 1,
                                      1,-4, 7,-1, 0, 3, 1, 0, 6,
@@ -538,7 +566,8 @@ Window {
                                     -6,-7, 1, 2, 0, 4, 1, 1, 1,
                                      4, 1, 1, 1, 1, 9,-4, 5, 1,
                                     -3, 3, 9, 0, 5, 0, 4, 1, 1]]
-            property var targets: [[1,2,9,4,1,4],[7,7,1,7,1,2,8]]
+            //property var targets: [[1,2,9,4,1,4],[7,7,1,7,1,2,8]]
+            property var targets: [[1,2],[7,7]]
 
             property var mapNumber: order
             property var currentId: 0
@@ -552,31 +581,47 @@ Window {
                 console.log(mapNumber)
                 for(var i=0; i<45; i++){
                     var component = Qt.createComponent("StaticImage.qml")
-                    var newCase = component.createObject(caseLists,{"x":window.width/2+(i%9-4)*window.width/9-80,"y":parseInt(i/9)*window.height/5+30,"number":mapDesc[mapNumber][i]})
+                    var newCase = component.createObject(caseLists,{"x":(i%9+.5)*window.width/9-movingItem.width/2,"y":(parseInt(i/9)+.5)*window.height/5-movingItem.height/2,"number":mapDesc[mapNumber][i]})
                     if(mapDesc[mapNumber][i]<1){
                         newCase.image = "res/empty.png"
+                        if(newCase.number==-1){
+                            newCase.broadcasting=true
+                        }
                     }
-                    else
+                    else{
                         newCase.image = "res/"+names[mapDesc[mapNumber][i]]+".png"
+                    }
                 }
             }
+            function updateMap(){
+                console.log("update "+caseLists.children.length)
+                if(caseLists.children.length==0)
+                    maps.createMap()
+                else{
+                    for(var i = 0; i<caseLists.children.length;i++){
+                        caseLists.children[i].number=mapDesc[mapNumber][i]
+                        if(mapDesc[mapNumber][i]<1){
+                            caseLists.children[i].image = "res/empty.png"
+                            if(caseLists.children[i].number==-1){
+                                caseLists.children[i].broadcasting=true
+                            }
+                        }
+                        else
+                            caseLists.children[i].image = "res/"+names[mapDesc[mapNumber][i]]+".png"
+                    }
+                }
+            }
+
             function endMap(){
                 console.log("Done")
+                publish("endMap")
+                currentId=0
                 if(maps.mapNumber!=order){
                     globalstates.state ="end"
                     return
                 }
-                maps.mapNumber=!order
-                currentId=0
-                for(var i = 0; i<caseLists.children.length;i++){
-                    caseLists.children[i].number=mapDesc[mapNumber][i]
-                    if(mapDesc[mapNumber][i]<1){
-                        caseLists.children[i].image = "res/empty.png"
-                    }
-                    else
-                        caseLists.children[i].image = "res/"+names[mapDesc[mapNumber][i]]+".png"
-                }
-
+                maps.mapNumber=1-order
+                globalstates.state ="midScreen"
             }
         }
 
@@ -587,224 +632,19 @@ Window {
             x: parent.width/2-width/2
             y: parent.height/2-height/2
         }
-}
-
-    Item {
-        id: debugToolbar
-        x:0
-        y:0
-        visible:false
-
-        Rectangle {
-            id: fullscreenButton
-            x: 50
-            y: 50
-            width: 180
-            height: 30
-            Text {
-                text:  "Toggle fullscreen"
-                anchors.centerIn: parent
-            }
-            color: "#DEDEDE"
-            border.color: "#999"
-            radius: 5
-            MouseArea {
-                anchors.fill: parent
-                onClicked: (window.visibility === Window.FullScreen) ? window.visibility = Window.Windowed : window.visibility = Window.FullScreen;
-            }
-        }
-        Rectangle {
-            id: visualAttentionButton
-            x: 250
-            y: 50
-            width: 250
-            height: 30
-            Text {
-                text:  "Start visual target tracking"
-                anchors.centerIn: parent
-            }
-            color: "#FFDEDE"
-            border.color: "#999"
-            radius: 5
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    debugToolbar.visible = false;
-                    globalstates.state = "visualtracking";
-                }
-            }
-        }
-        Rectangle {
-            id: itemsPlacementButton
-            x: 550
-            y: 50
-            width: 250
-            height: 30
-            Text {
-                text:  "Start items placement"
-                anchors.centerIn: parent
-            }
-            color: "#FFDEDE"
-            border.color: "#999"
-            radius: 5
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    debugToolbar.visible = false;
-                    globalstates.state = "items-placement";
-                }
-            }
-        }
-        Rectangle {
-            id: tutorialButton
-            x: 850
-            y: 50
-            width: 250
-            height: 30
-            Text {
-                text:  "Start tutorial"
-                anchors.centerIn: parent
-            }
-            color: "#FFDEDE"
-            border.color: "#999"
-            radius: 5
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    debugToolbar.visible = false;
-                    globalstates.state = "tutorial";
-                }
-            }
-        }
-        Rectangle {
-            id: freeplayButton
-            x: 1150
-            y: 50
-            width: 250
-            height: 30
-            Text {
-                text:  "Start freeplay"
-                anchors.centerIn: parent
-            }
-            color: "#FFDEDE"
-            border.color: "#999"
-            radius: 5
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    debugToolbar.visible = false;
-                    globalstates.state = "freeplay-sandbox";
-                }
-            }
-        }
-        Rectangle {
-            id: debugButton
-            x: 50
-            y: 100
-            width: 180
-            height: 30
-            Text {
-                text: debugDraw.visible ? "Physics debug: on" : "Physics debug: off"
-                anchors.centerIn: parent
-            }
-            color: "#DEDEDE"
-            border.color: "#999"
-            radius: 5
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    debugDraw.visible = !debugDraw.visible;
-                }
-            }
-        }
-        Rectangle {
-            id: robotButton
-            x: 50
-            y: 150
-            width: 180
-            height: 30
-            Text {
-                text: interactiveitems.showRobotChild ? "Hide robot/child" : "Control robot/child"
-                anchors.centerIn: parent
-            }
-            color: "#DEDEDE"
-            border.color: "#999"
-            radius: 5
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    interactiveitems.showRobotChild = !interactiveitems.showRobotChild;
-                    if (interactiveitems.showRobotChild) {
-                        robot.x=window.width - robotImg.width;
-                        robot.y=window.height / 2 - robotImg.height / 2;
-                    }
-                }
-            }
-        }
-        Rectangle {
-            id: robotPublisherButton
-            x: 50
-            y: 200
-            width: 180
-            height: 30
-            Text {
-                text: interactiveitems.publishRobotChild ? "Stop publishing robot/child frames" : "Publish robot/child frames"
-                anchors.centerIn: parent
-            }
-            color: "#DEDEDE"
-            border.color: "#999"
-            radius: 5
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {interactiveitems.publishRobotChild = !interactiveitems.publishRobotChild;}
-            }
-        }
+    }
+    RosStringPublisher {
+        id: interactionEvents
+        topic: "sandtray/interaction_events"
     }
 
-    DebugDraw {
-        id: debugDraw
-        world: physicsWorld
-        opacity: 0.75
-        visible: false
-    }
-
-    Rectangle {
-        id: fiducialmarker
-        color:"white"
-        opacity:0.8
-        visible: false
-        anchors.fill:parent
-
-        Image {
-            // set the actual size of the SVG page
-            width: 0.60 / sandbox.pixel2meter
-            height: 0.33 / sandbox.pixel2meter
-            // make sure the image is in the corner ie, the sandtray origin
-            x: 0
-            y: 0
-            fillMode: Image.PreserveAspectCrop
-            source: "res/tags/markers.svg"
-
-        }
-
-        RosSignal {
-            id: localising
-            topic: "sandtray/signals/robot_localising"
-            onTriggered: {
-                    fiducialmarker.visible=true;
-                    hide_fiducial_markers.start();
-            }
-        }
-
-        Timer {
-            id: hide_fiducial_markers
-            interval: 5000; running: false; repeat: false
-            onTriggered: {
-                fiducialmarker.visible = false;
-            }
-
-        }
-
+    function publish(event){
+        var d = new Date()
+        console.log(window.startingTime)
+        var n = d.getTime() - window.startingTime
+        var log=[n,event]
+        fileio.write(window.qlogfilename, log.join(","))
+        interactionEvents.text=event
     }
 
     MouseArea {
@@ -841,30 +681,21 @@ Window {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
 
-        //Rectangle {
-        //    anchors.fill: parent
-        //    color: "red"
-        //}
+        Rectangle {
+            anchors.fill: parent
+            color: "red"
+        }
 
         property int clicks: 0
 
         onClicked: {
             clicks += 1;
             if (clicks === 3) {
-                debugToolbar.visible=true;
+                globalstates.state="start"
+                maps.mapNumber=maps.order
+
                 clicks = 0;
-                timerHideDebug.start();
             }
-        }
-
-        Timer {
-            id: timerHideDebug
-            interval: 5000; running: false; repeat: false
-            onTriggered: {
-                debugToolbar.visible = false;
-            }
-
         }
     }
-
 }

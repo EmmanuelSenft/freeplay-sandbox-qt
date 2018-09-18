@@ -7,14 +7,14 @@ InteractiveItem {
 
     property double scale: 1.6
     property double bbScale: 1.0
-    property int number: 0
     name: ""
     property var stash: parent
 
-    x: stash.x + 10 + Math.random() * 0.5 * stash.width
-    y: stash.y + 10 + Math.random() * 0.9 * stash.height
+    x: 0
+    y: 0
 
-    width: scale * 2 * parent.height * sandbox.physicalCubeSize / sandbox.physicalMapWidth
+    width: 180
+    height: width
     rotation: 0
 
     property double bbRadius: bbScale * character.width/2
@@ -63,6 +63,8 @@ InteractiveItem {
             }
             if(under.number == number){
                 under.image = "res/"+name+".png"
+                under.broadcasting=false
+                publish("success")
                 x= map.width/2-width/2
                 y= map.height/2-height/2
                 if(number == -maps.targets[maps.mapNumber].length){
@@ -71,6 +73,13 @@ InteractiveItem {
                 else{
                     console.log("normal")
                     maps.currentId += 1
+
+                    for(var i = 0; i<caseLists.children.length;i++){
+                        if(caseLists.children[i].number==number){
+                            caseLists.children[i].broadcasting=true
+                            break
+                        }
+                    }
                     under.name=name
                 }
             }

@@ -15,13 +15,17 @@
         <file>res/full.png</file>
         <file>res/hospital.png</file>
         <file>res/police.png</file>
-        <file>res/residence.png</file>
         <file>StaticImage.qml</file>
         <file>res/target.png</file>
         <file>res/church.png</file>
-        <file>res/desert.png</file>
         <file>res/manor.png</file>
-        <file>res/plant.png</file>
         <file>res/empty.png</file>
+        <file>res/BG1.png</file>
+        <file>res/Map1BG.png</file>
+        <file>PrettyLabel.qml</file>
+        <file>PrettyButton.qml</file>
+        <file>res/residential.png</file>
+        <file>res/factory.png</file>
+        <file>res/power.png</file>
     </qresource>
 </RCC>

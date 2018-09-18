@@ -8,6 +8,7 @@ Item {
         width: 2*parent.height * sandbox.physicalCubeSize / sandbox.physicalMapWidth
         height: width
         rotation: Math.random() * 360
+        property int number: 0
 
         objectName: "interactive"
 
@@ -78,7 +79,7 @@ Item {
         rotation: parent.rotation
         TFBroadcaster {
             target: parent
-            frame: parent.parent.name
+            frame: maps.mapNumber+1+"_"+-number+"_"+parent.parent.name
             active: sandbox.visible
 
             origin: mapOrigin
@@ -87,4 +88,5 @@ Item {
             pixelscale: 9/sandbox.width
         }
     }
+
 }

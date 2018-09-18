@@ -7,7 +7,7 @@ import Box2D 2.0
 Item {
     id: staticImage
     property double scale: 1.6
-    width: 160
+    width: 180
     height: width
     x: -100
     y: -100
@@ -16,6 +16,7 @@ Item {
     property int centerX: x+width/2
     property int centerY: y+height/2
     property int number: 0
+    property bool broadcasting: false
 
     property string name: ""
     property string image: "res/"+"target"+".png"
@@ -56,12 +57,21 @@ Item {
             y: parent.y + (parent.height - parent.paintedHeight)/2
         }
     }
-
     
     Item {
         id: objectCenter
         anchors.centerIn: parent
         rotation: parent.rotation
+        TFBroadcaster {
+            target: parent
+            frame: maps.mapNumber+1+"_"+-number+"_"+"target"
+            active: staticImage.broadcasting
+
+            origin: mapOrigin
+            parentframe: mapOrigin.name
+
+            pixelscale: 9/sandbox.width
+        }
     }
     onImageChanged: console.log(image)
 }

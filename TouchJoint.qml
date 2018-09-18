@@ -51,6 +51,7 @@ TouchPoint {
                 obj.pressed()
 
                 movingItem = true;
+                publish("touch")
 
                 // restack item to the top
                 interactiveitems.currentMaxZ += 1;
@@ -67,6 +68,7 @@ TouchPoint {
                 var obj = interactiveitems.childAt(x, y);
                 if (obj.objectName === "interactive") {
                     obj.released()
+                    publish("release")
                 }
 
                 joint.bodyB = null;
